@@ -1,4 +1,10 @@
 {
   "maas": 76000,
-  "giderler": []
+  "giderler": [
+    {
+      "ad": "Kira",
+      "miktar": 35000,
+      "id": "1759610349876"
+    }
+  ]
 }
