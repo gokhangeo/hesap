@@ -6,13 +6,18 @@
     <title>Aylık Maaş ve Gider Takibi</title>
     <style>
         :root {
-            --primary-bg: #f0f2f5;
+            --primary-bg-start: #f8fafc;
+            --primary-bg-end: #e2e8f0;
             --card-bg: #ffffff;
             --text-color: #1c1e21;
-            --primary-color: #007bff;
-            --danger-color: #dc3545;
-            --success-color: #28a745;
-            --border-color: #ddd;
+            --primary-color-start: #0d6efd;
+            --primary-color-end: #0056b3;
+            --danger-color-start: #dc3545;
+            --danger-color-end: #b02a37;
+            --success-color-start: #198754;
+            --success-color-end: #146c43;
+            --border-color: #dee2e6;
+            --shadow-color: rgba(0, 0, 0, 0.08);
         }
         * {
             box-sizing: border-box;
@@ -21,7 +26,7 @@
         }
         body {
             font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, "Helvetica Neue", Arial, sans-serif;
-            background-color: var(--primary-bg);
+            background: linear-gradient(to top right, var(--primary-bg-end), var(--primary-bg-start));
             color: var(--text-color);
             line-height: 1.6;
         }
@@ -32,10 +37,16 @@
         }
         .kart {
             background-color: var(--card-bg);
-            border-radius: 8px;
-            padding: 20px;
+            border-radius: 12px;
+            padding: 25px;
             margin-bottom: 20px;
-            box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+            border: 1px solid #fff;
+            box-shadow: 0 4px 12px var(--shadow-color);
+            transition: all 0.3s ease;
+        }
+        .kart:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 6px 16px rgba(0, 0, 0, 0.1);
         }
         .baslik-bolumu {
             display: flex;
@@ -44,7 +55,8 @@
             margin-bottom: 20px;
         }
         .baslik-bolumu h1 {
-            font-size: 1.5em;
+            font-size: 1.6em;
+            color: #333;
         }
         .ozet-alani {
             display: flex;
@@ -60,50 +72,64 @@
             font-size: 0.9em;
             color: #606770;
             margin-bottom: 5px;
-            font-weight: normal;
+            font-weight: 500;
         }
         .ozet-alani p {
-            font-size: 1.4em;
-            font-weight: 600;
+            font-size: 1.5em;
+            font-weight: 700;
         }
-        .kalan-pozitif { color: var(--success-color); }
-        .kalan-negatif { color: var(--danger-color); }
+        .kalan-pozitif { color: var(--success-color-start); }
+        .kalan-negatif { color: var(--danger-color-start); }
 
         .form-grup { margin-bottom: 15px; }
         label {
             display: block;
-            margin-bottom: 5px;
+            margin-bottom: 8px;
             font-weight: 600;
+            color: #495057;
         }
         input[type="text"],
         input[type="number"],
         select {
             width: 100%;
-            padding: 12px;
+            padding: 12px 15px;
             border: 1px solid var(--border-color);
-            border-radius: 6px;
+            border-radius: 8px;
             font-size: 1em;
-            background-color: #fcfcfc;
+            background-color: #f8f9fa;
+            transition: all 0.2s ease-in-out;
+        }
+        input:focus, select:focus {
+            outline: none;
+            border-color: var(--primary-color-start);
+            box-shadow: 0 0 0 3px rgba(13, 110, 253, 0.2);
+            background-color: #fff;
         }
         .gider-ekle-formu {
             display: grid;
             grid-template-columns: 1fr 1fr;
-            gap: 10px;
+            gap: 15px;
         }
         #digerGiderAdiWrapper { grid-column: 1 / -1; }
         button {
             width: 100%;
-            padding: 12px;
+            padding: 14px;
             border: none;
-            border-radius: 6px;
-            background-color: var(--primary-color);
+            border-radius: 8px;
             color: white;
-            font-size: 1em;
+            font-size: 1.1em;
             font-weight: 600;
             cursor: pointer;
-            transition: background-color 0.2s;
+            transition: all 0.2s ease-in-out;
+            box-shadow: 0 2px 5px rgba(0, 0, 0, 0.2);
         }
-        button:hover { background-color: #0056b3; }
+        button:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.3);
+        }
+        #giderEkleBtn {
+            background: linear-gradient(45deg, var(--primary-color-start), var(--primary-color-end));
+        }
         .gider-listesi {
             list-style-type: none;
             padding: 0;
@@ -112,46 +138,50 @@
             display: flex;
             justify-content: space-between;
             align-items: center;
-            padding: 12px 5px;
+            padding: 14px 5px;
             border-bottom: 1px solid var(--border-color);
         }
         .gider-listesi li:last-child { border-bottom: none; }
         .gider-listesi span { font-size: 1.1em; }
         .sil-btn {
-            background-color: var(--danger-color);
-            color: white;
+            background: linear-gradient(45deg, var(--danger-color-start), var(--danger-color-end));
             border: none;
             border-radius: 50%;
-            width: 30px;
-            height: 30px;
+            width: 32px;
+            height: 32px;
             cursor: pointer;
             font-weight: bold;
             font-size: 1.2em;
-            line-height: 30px;
+            line-height: 32px;
             text-align: center;
             padding: 0;
         }
         .durum-mesaji {
             text-align: center;
-            padding: 10px;
-            margin-top: 15px;
-            border-radius: 6px;
-            display: none;
+            padding: 12px 20px;
+            border-radius: 8px;
             position: fixed;
             bottom: 20px;
             left: 50%;
-            transform: translateX(-50%);
+            transform: translate(-50%, 20px);
             z-index: 100;
             box-shadow: 0 4px 8px rgba(0,0,0,0.2);
+            opacity: 0;
+            visibility: hidden;
+            transition: all 0.4s ease;
+        }
+        .durum-mesaji.visible {
+            opacity: 1;
+            visibility: visible;
+            transform: translate(-50%, 0);
         }
         .durum-bilgi { background-color: #e2e3e5; color: #383d41;}
-        .durum-basari { background-color: #d4edda; color: #155724; }
-        .durum-hata { background-color: #f8d7da; color: #721c24; }
+        .durum-basari { background: linear-gradient(45deg, #d1e7dd, #b3d9c4); color: #0a3622; border: 1px solid var(--success-color-end); }
+        .durum-hata { background: linear-gradient(45deg, #f8d7da, #f1c2c5); color: #58151c; border: 1px solid var(--danger-color-end);}
         #exportBtn {
-            background-color: var(--success-color);
-            margin-top: 10px;
+            background: linear-gradient(45deg, var(--success-color-start), var(--success-color-end));
+            margin-top: 15px;
         }
-        #exportBtn:hover { background-color: #218838; }
     </style>
 </head>
 <body>
@@ -211,7 +241,7 @@
                     <input type="text" id="digerGiderAdiInput" placeholder="Örn: Market Alışverişi">
                 </div>
             </div>
-            <button id="giderEkleBtn">Gider Ekle</button>
+            <button id="giderEkleBtn">Ekle & Kaydet</button>
         </div>
 
         <div class="kart">
@@ -235,13 +265,15 @@
 
         const REPO_SAHIBI = 'gokhangeo';
         const REPO_ADI = 'hesap';
-        const DOSYA_YOLU = 'data/butce_verileri.json'; // Dosya adını değiştirdim
+        const DOSYA_YOLU = 'data/butce_verileri.json';
         const API_URL = `https://api.github.com/repos/${REPO_SAHIBI}/${REPO_ADI}/contents/${DOSYA_YOLU}`;
 
         // --- UYGULAMA DEĞİŞKENLERİ ---
         let tumVeriler = {};
         let seciliAy = '';
         let dosyaSHA = null;
+        let durumTimeout;
+
 
         // --- DOM ELEMENTLERİ ---
         const aySecici = document.getElementById('aySecici');
@@ -278,7 +310,7 @@
         
         // --- API FONKSİYONLARI ---
         async function verileriCek() {
-            durumGoster('Veriler yükleniyor...', 'bilgi');
+            durumGoster('Veriler yükleniyor...', 'bilgi', 5000);
             try {
                 const response = await fetch(API_URL, {
                     headers: { 'Authorization': `token ${GITHUB_TOKEN}`, 'Accept': 'application/vnd.github.v3+json' }
@@ -296,7 +328,7 @@
                     tumVeriler = JSON.parse(atob(data.content));
                     durumGoster('Veriler başarıyla yüklendi.', 'basari', 2000);
                 }
-                aySeciciyiDoldur(); // Veri geldikten sonra ay listesini güncelle
+                aySeciciyiDoldur(); 
                 arayuzuGuncelle();
             } catch (error) {
                 console.error('Veri çekme hatası:', error);
@@ -305,7 +337,7 @@
         }
 
         async function verileriKaydet() {
-            durumGoster('Değişiklikler kaydediliyor...', 'bilgi');
+            durumGoster('Kaydediliyor...', 'bilgi', 2000);
             try {
                 const icerikBase64 = btoa(JSON.stringify(tumVeriler, null, 2));
                 const govde = {
@@ -325,7 +357,7 @@
                 
                 const data = await response.json();
                 dosyaSHA = data.content.sha;
-                durumGoster('Değişiklikler başarıyla kaydedildi!', 'basari', 2000);
+                durumGoster('Başarıyla kaydedildi!', 'basari', 2000);
             } catch (error) {
                 console.error('Veri kaydetme hatası:', error);
                 durumGoster('Değişiklikler kaydedilemedi!', 'hata');
@@ -358,7 +390,7 @@
 
             giderListesi.innerHTML = '';
             if (ayVerisi.giderler.length === 0) {
-                giderListesi.innerHTML = "<li>Bu ay için gider eklenmedi.</li>";
+                giderListesi.innerHTML = "<li style='justify-content: center; color: #888;'>Bu ay için gider eklenmedi.</li>";
             } else {
                 ayVerisi.giderler.forEach(gider => {
                     const li = document.createElement('li');
@@ -377,7 +409,6 @@
             const mevcutAylar = new Set(Object.keys(tumVeriler));
             const simdi = new Date();
             
-            // Son 6 ay, mevcut ay ve gelecek 1 ayı ekle
             for (let i = 6; i > 0; i--) {
                 const ay = new Date(simdi.getFullYear(), simdi.getMonth() - i, 1);
                 mevcutAylar.add(formatAy(ay));
@@ -388,6 +419,7 @@
 
             const siraliAylar = Array.from(mevcutAylar).sort().reverse();
             
+            const simdikiSecim = aySecici.value || formatAy(simdi);
             aySecici.innerHTML = '';
             siraliAylar.forEach(ay => {
                 const option = document.createElement('option');
@@ -395,7 +427,7 @@
                 option.textContent = new Date(ay + '-02').toLocaleDateString('tr-TR', { month: 'long', year: 'numeric' });
                 aySecici.appendChild(option);
             });
-            aySecici.value = formatAy(simdi);
+            aySecici.value = siraliAylar.includes(simdikiSecim) ? simdikiSecim : formatAy(simdi);
         }
 
         // --- İŞLEM FONKSİYONLARI ---
@@ -483,13 +515,15 @@
 
         // --- YARDIMCI FONKSİYONLAR ---
         function durumGoster(mesaj, tip, sure = 3000) {
+            if(durumTimeout) clearTimeout(durumTimeout);
+
             durumMesaji.textContent = mesaj;
             durumMesaji.className = `durum-mesaji durum-${tip}`;
-            durumMesaji.style.display = 'block';
-
+            durumMesaji.classList.add('visible');
+            
             if (sure > 0) {
-                setTimeout(() => {
-                    durumMesaji.style.display = 'none';
+                durumTimeout = setTimeout(() => {
+                    durumMesaji.classList.remove('visible');
                 }, sure);
             }
         }
@@ -506,3 +540,4 @@
     </script>
 </body>
 </html>
+
