@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Maaş ve Gider Takibi</title>
+    <title>Aylık Maaş ve Gider Takibi</title>
     <style>
         :root {
             --primary-bg: #f0f2f5;
@@ -37,6 +37,15 @@
             margin-bottom: 20px;
             box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
         }
+        .baslik-bolumu {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 20px;
+        }
+        .baslik-bolumu h1 {
+            font-size: 1.5em;
+        }
         .ozet-alani {
             display: flex;
             justify-content: space-between;
@@ -45,6 +54,7 @@
         }
         .ozet-alani div {
             flex: 1;
+            padding: 0 5px;
         }
         .ozet-alani h3 {
             font-size: 0.9em;
@@ -53,41 +63,34 @@
             font-weight: normal;
         }
         .ozet-alani p {
-            font-size: 1.5em;
+            font-size: 1.4em;
             font-weight: 600;
         }
-        .kalan-pozitif {
-            color: var(--success-color);
-        }
-        .kalan-negatif {
-            color: var(--danger-color);
-        }
-        .form-grup {
-            margin-bottom: 15px;
-        }
+        .kalan-pozitif { color: var(--success-color); }
+        .kalan-negatif { color: var(--danger-color); }
+
+        .form-grup { margin-bottom: 15px; }
         label {
             display: block;
             margin-bottom: 5px;
             font-weight: 600;
         }
         input[type="text"],
-        input[type="number"] {
+        input[type="number"],
+        select {
             width: 100%;
             padding: 12px;
             border: 1px solid var(--border-color);
             border-radius: 6px;
             font-size: 1em;
+            background-color: #fcfcfc;
         }
         .gider-ekle-formu {
-            display: flex;
+            display: grid;
+            grid-template-columns: 1fr 1fr;
             gap: 10px;
         }
-        .gider-ekle-formu .form-grup {
-            flex: 1;
-        }
-        .gider-ekle-formu .form-grup:first-child {
-            flex: 2;
-        }
+        #digerGiderAdiWrapper { grid-column: 1 / -1; }
         button {
             width: 100%;
             padding: 12px;
@@ -100,9 +103,7 @@
             cursor: pointer;
             transition: background-color 0.2s;
         }
-        button:hover {
-            background-color: #0056b3;
-        }
+        button:hover { background-color: #0056b3; }
         .gider-listesi {
             list-style-type: none;
             padding: 0;
@@ -111,15 +112,11 @@
             display: flex;
             justify-content: space-between;
             align-items: center;
-            padding: 12px 0;
+            padding: 12px 5px;
             border-bottom: 1px solid var(--border-color);
         }
-        .gider-listesi li:last-child {
-            border-bottom: none;
-        }
-        .gider-listesi span {
-            font-size: 1.1em;
-        }
+        .gider-listesi li:last-child { border-bottom: none; }
+        .gider-listesi span { font-size: 1.1em; }
         .sil-btn {
             background-color: var(--danger-color);
             color: white;
@@ -140,50 +137,53 @@
             margin-top: 15px;
             border-radius: 6px;
             display: none;
+            position: fixed;
+            bottom: 20px;
+            left: 50%;
+            transform: translateX(-50%);
+            z-index: 100;
+            box-shadow: 0 4px 8px rgba(0,0,0,0.2);
         }
-        .durum-basari {
-            background-color: #d4edda;
-            color: #155724;
-            display: block;
-        }
-        .durum-hata {
-            background-color: #f8d7da;
-            color: #721c24;
-            display: block;
-        }
+        .durum-bilgi { background-color: #e2e3e5; color: #383d41;}
+        .durum-basari { background-color: #d4edda; color: #155724; }
+        .durum-hata { background-color: #f8d7da; color: #721c24; }
         #exportBtn {
             background-color: var(--success-color);
             margin-top: 10px;
         }
-        #exportBtn:hover {
-            background-color: #218838;
-        }
+        #exportBtn:hover { background-color: #218838; }
     </style>
 </head>
 <body>
 
     <div class="container">
-        <h1 style="text-align: center; margin-bottom: 20px;">Aylık Bütçe Takibi</h1>
+        <div class="baslik-bolumu">
+            <h1>Bütçe Takibi</h1>
+            <div class="form-grup" style="margin-bottom: 0; min-width: 150px;">
+                <label for="aySecici" style="margin-bottom: 2px;">Ay Seçin</label>
+                <select id="aySecici"></select>
+            </div>
+        </div>
 
         <div class="kart ozet-alani">
             <div>
-                <h3>Toplam Maaş</h3>
+                <h3 id="ozetMaasBaslik">Maaş</h3>
                 <p id="gosterMaas">0 ₺</p>
             </div>
             <div>
-                <h3>Toplam Gider</h3>
+                <h3 id="ozetGiderBaslik">Gider</h3>
                 <p id="gosterGider">0 ₺</p>
             </div>
             <div>
-                <h3>Kalan Para</h3>
+                <h3 id="ozetKalanBaslik">Kalan</h3>
                 <p id="gosterKalan">0 ₺</p>
             </div>
         </div>
 
         <div class="kart">
             <div class="form-grup">
-                <label for="maasInput">Aylık Net Maaşınız (₺)</label>
-                <input type="number" id="maasInput" placeholder="Örn: 15000">
+                <label for="maasInput">Seçili Ayın Net Maaşı (₺)</label>
+                <input type="number" id="maasInput" placeholder="Maaşı girip Enter'a basın">
             </div>
         </div>
 
@@ -191,59 +191,65 @@
             <h2>Yeni Gider Ekle</h2>
             <div class="gider-ekle-formu">
                 <div class="form-grup">
-                    <label for="giderAdiInput">Gider Adı</label>
-                    <input type="text" id="giderAdiInput" placeholder="Kira, Fatura vb.">
+                    <label for="giderKategoriInput">Kategori</label>
+                    <select id="giderKategoriInput">
+                        <option value="Kira">Kira</option>
+                        <option value="Aidat">Aidat</option>
+                        <option value="Kredi">Kredi</option>
+                        <option value="K.Kartı">Kredi Kartı</option>
+                        <option value="Servis">Servis</option>
+                        <option value="Fatura">Fatura</option>
+                        <option value="Diğer">Diğer</option>
+                    </select>
                 </div>
                 <div class="form-grup">
                     <label for="giderMiktariInput">Tutar (₺)</label>
                     <input type="number" id="giderMiktariInput" placeholder="Tutar">
+                </div>
+                <div class="form-grup" id="digerGiderAdiWrapper" style="display: none;">
+                    <label for="digerGiderAdiInput">Diğer Gider Açıklaması</label>
+                    <input type="text" id="digerGiderAdiInput" placeholder="Örn: Market Alışverişi">
                 </div>
             </div>
             <button id="giderEkleBtn">Gider Ekle</button>
         </div>
 
         <div class="kart">
-            <h2>Gider Listesi</h2>
-            <ul id="giderListesi">
-                </ul>
-             <button id="exportBtn">E-Tablo Olarak İndir (CSV)</button>
+            <h2 id="giderListesiBaslik">Gider Listesi</h2>
+            <ul id="giderListesi"></ul>
+            <button id="exportBtn">Bu Ayı E-Tablo Olarak İndir (CSV)</button>
         </div>
-        
-        <div id="durumMesaji" class="durum-mesaji"></div>
-
     </div>
+    
+    <div id="durumMesaji" class="durum-mesaji"></div>
 
     <script>
         // --- GÜVENLİK UYARISI ---
-        // BU API ANAHTARI (GITHUB_TOKEN) İSTEMCİ TARAFINDA (TARAYICIDA) GÖRÜLEBİLİR DURUMDADIR.
-        // BU, CİDDİ BİR GÜVENLİK RİSKİDİR. BU ANAHTARIN YALNIZCA BU REPO İÇİN "repo"
-        // KAPSAMINDA İZİNLERE SAHİP OLDUĞUNDAN EMİN OLUN.
-        // BU YÖNTEM, SUNUCUSUZ (SERVERLESS) BİR ÇÖZÜM OLDUĞU İÇİN KULLANILMIŞTIR.
+        // BU API ANAHTARI İSTEMCİ TARAFINDA (TARAYICIDA) GÖRÜLEBİLİR DURUMDADIR. BU, CİDDİ BİR GÜVENLİK RİSKİDİR.
         // HASSAS VERİLER İÇİN KESİNLİKLE ÖNERİLMEZ.
 
-        // --- GITHUB API KONFİGÜRASYONU ---
-        // Bu bölümü kendi GitHub bilgilerinize göre düzenleyin.
-        const TOKEN_PART1 = 'ghp_MAuvwYTJDUiqFY5h72CZ'; // API anahtarının ilk kısmı
-        const TOKEN_PART2 = 'eXnMKuxrCJ08sfAl';      // API anahtarının ikinci kısmı
-        const GITHUB_TOKEN = TOKEN_PART1 + TOKEN_PART2; // Anahtar birleştiriliyor.
+        // --- GITHUB API KONFİGURASYONU ---
+        const TOKEN_PART1 = 'ghp_MAuvwYTJDUiqFY5h72CZ';
+        const TOKEN_PART2 = 'eXnMKuxrCJ08sfAl';
+        const GITHUB_TOKEN = TOKEN_PART1 + TOKEN_PART2;
 
         const REPO_SAHIBI = 'gokhangeo';
         const REPO_ADI = 'hesap';
-        const DOSYA_YOLU = 'data/aylik_kayit.json';
-
+        const DOSYA_YOLU = 'data/butce_verileri.json'; // Dosya adını değiştirdim
         const API_URL = `https://api.github.com/repos/${REPO_SAHIBI}/${REPO_ADI}/contents/${DOSYA_YOLU}`;
 
         // --- UYGULAMA DEĞİŞKENLERİ ---
-        let mevcutVeri = {
-            maas: 0,
-            giderler: []
-        };
-        let dosyaSHA = null; // Dosyayı güncellemek için gerekli olan SHA karması
+        let tumVeriler = {};
+        let seciliAy = '';
+        let dosyaSHA = null;
 
         // --- DOM ELEMENTLERİ ---
+        const aySecici = document.getElementById('aySecici');
         const maasInput = document.getElementById('maasInput');
-        const giderAdiInput = document.getElementById('giderAdiInput');
+        const giderKategoriInput = document.getElementById('giderKategoriInput');
         const giderMiktariInput = document.getElementById('giderMiktariInput');
+        const digerGiderAdiWrapper = document.getElementById('digerGiderAdiWrapper');
+        const digerGiderAdiInput = document.getElementById('digerGiderAdiInput');
         const giderEkleBtn = document.getElementById('giderEkleBtn');
         const giderListesi = document.getElementById('giderListesi');
         const gosterMaas = document.getElementById('gosterMaas');
@@ -251,123 +257,110 @@
         const gosterKalan = document.getElementById('gosterKalan');
         const durumMesaji = document.getElementById('durumMesaji');
         const exportBtn = document.getElementById('exportBtn');
+        const giderListesiBaslik = document.getElementById('giderListesiBaslik');
 
         // --- OLAY DİNLEYİCİLERİ ---
-        document.addEventListener('DOMContentLoaded', verileriCek);
+        document.addEventListener('DOMContentLoaded', baslat);
+        aySecici.addEventListener('change', ayDegistir);
         maasInput.addEventListener('change', maasiGuncelle);
         giderEkleBtn.addEventListener('click', giderEkle);
+        giderKategoriInput.addEventListener('change', () => {
+            digerGiderAdiWrapper.style.display = giderKategoriInput.value === 'Diğer' ? 'block' : 'none';
+        });
         exportBtn.addEventListener('click', verileriDisaAktar);
-
-
-        // --- TEMEL FONKSİYONLAR ---
-
-        // GitHub'dan verileri çeker
+        
+        // --- BAŞLANGIÇ FONKSİYONU ---
+        function baslat() {
+            aySeciciyiDoldur();
+            seciliAy = aySecici.value;
+            verileriCek();
+        }
+        
+        // --- API FONKSİYONLARI ---
         async function verileriCek() {
             durumGoster('Veriler yükleniyor...', 'bilgi');
             try {
                 const response = await fetch(API_URL, {
-                    headers: {
-                        'Authorization': `token ${GITHUB_TOKEN}`,
-                        'Accept': 'application/vnd.github.v3+json'
-                    }
+                    headers: { 'Authorization': `token ${GITHUB_TOKEN}`, 'Accept': 'application/vnd.github.v3+json' }
                 });
 
                 if (response.status === 404) {
-                    console.log('Veri dosyası bulunamadı. Yeni dosya oluşturulacak.');
-                    durumGoster('Hoş geldiniz! Lütfen maaşınızı girin.', 'bilgi', 5000);
-                    mevcutVeri = { maas: 0, giderler: [] };
-                    dosyaSHA = null; // Dosya yoksa SHA null'dır.
-                    arayuzuGuncelle();
-                    return;
-                }
-                
-                if (!response.ok) {
+                    tumVeriler = {};
+                    dosyaSHA = null;
+                    durumGoster('Hoş geldiniz! Yeni bütçe kaydınız oluşturulacak.', 'bilgi', 4000);
+                } else if (!response.ok) {
                     throw new Error(`GitHub API Hatası: ${response.statusText}`);
+                } else {
+                    const data = await response.json();
+                    dosyaSHA = data.sha;
+                    tumVeriler = JSON.parse(atob(data.content));
+                    durumGoster('Veriler başarıyla yüklendi.', 'basari', 2000);
                 }
-
-                const data = await response.json();
-                dosyaSHA = data.sha;
-                // Base64 formatındaki içeriği çöz
-                const cozulmusIcerik = atob(data.content);
-                mevcutVeri = JSON.parse(cozulmusIcerik);
-
+                aySeciciyiDoldur(); // Veri geldikten sonra ay listesini güncelle
                 arayuzuGuncelle();
-                durumGoster('Veriler başarıyla yüklendi.', 'basari', 3000);
             } catch (error) {
                 console.error('Veri çekme hatası:', error);
-                durumGoster('Veriler yüklenemedi. Lütfen sayfayı yenileyin.', 'hata');
+                durumGoster('Veriler yüklenemedi. Sayfayı yenileyin.', 'hata');
             }
         }
 
-        // Verileri GitHub'a kaydeder (veya oluşturur)
         async function verileriKaydet() {
             durumGoster('Değişiklikler kaydediliyor...', 'bilgi');
             try {
-                // Veriyi Base64 formatına çevir
-                const icerikBase64 = btoa(JSON.stringify(mevcutVeri, null, 2));
-
+                const icerikBase64 = btoa(JSON.stringify(tumVeriler, null, 2));
                 const govde = {
-                    message: `Veri güncellemesi - ${new Date().toISOString()}`,
+                    message: `Bütçe güncellemesi: ${seciliAy} - ${new Date().toISOString()}`,
                     content: icerikBase64,
-                    sha: dosyaSHA // Eğer dosya varsa SHA'yı gönder, yoksa gönderme
+                    sha: dosyaSHA
                 };
-
-                // Eğer dosya yeni oluşturuluyorsa sha'yı payload'dan kaldır
-                if (!dosyaSHA) {
-                    delete govde.sha;
-                }
+                if (!dosyaSHA) delete govde.sha;
 
                 const response = await fetch(API_URL, {
                     method: 'PUT',
-                    headers: {
-                        'Authorization': `token ${GITHUB_TOKEN}`,
-                        'Accept': 'application/vnd.github.v3+json'
-                    },
+                    headers: { 'Authorization': `token ${GITHUB_TOKEN}`, 'Accept': 'application/vnd.github.v3+json' },
                     body: JSON.stringify(govde)
                 });
                 
-                if (!response.ok) {
-                    const errorData = await response.json();
-                    throw new Error(`Kaydetme Hatası: ${errorData.message}`);
-                }
-
+                if (!response.ok) throw new Error(`Kaydetme Hatası: ${await response.text()}`);
+                
                 const data = await response.json();
-                dosyaSHA = data.content.sha; // Yeni commit'in SHA'sını al ve sakla
-                durumGoster('Değişiklikler başarıyla kaydedildi!', 'basari', 3000);
+                dosyaSHA = data.content.sha;
+                durumGoster('Değişiklikler başarıyla kaydedildi!', 'basari', 2000);
             } catch (error) {
                 console.error('Veri kaydetme hatası:', error);
                 durumGoster('Değişiklikler kaydedilemedi!', 'hata');
             }
         }
 
-        // Arayüzü güncelleyen ana fonksiyon
+        // --- ARAYÜZ FONKSİYONLARI ---
         function arayuzuGuncelle() {
-            maasInput.value = mevcutVeri.maas > 0 ? mevcutVeri.maas : '';
+            const ayVerisi = tumVeriler[seciliAy] || { maas: 0, giderler: [] };
             
-            let toplamGider = mevcutVeri.giderler.reduce((toplam, gider) => toplam + parseFloat(gider.miktar), 0);
-            let kalanPara = mevcutVeri.maas - toplamGider;
+            maasInput.value = ayVerisi.maas > 0 ? ayVerisi.maas : '';
             
-            gosterMaas.textContent = `${formatla(mevcutVeri.maas)} ₺`;
+            const toplamGider = ayVerisi.giderler.reduce((toplam, gider) => toplam + parseFloat(gider.miktar), 0);
+            const kalanPara = ayVerisi.maas - toplamGider;
+            
+            const ayAdi = new Date(seciliAy + '-02').toLocaleDateString('tr-TR', { month: 'long', year: 'numeric' });
+            
+            document.querySelectorAll('#ozetMaasBaslik, #ozetGiderBaslik, #ozetKalanBaslik').forEach(el => {
+                el.textContent = `${el.id.replace('ozet', '').replace('Baslik','')} (${ayAdi.split(' ')[0]})`;
+            });
+            giderListesiBaslik.textContent = `${ayAdi} Gider Listesi`;
+
+
+            gosterMaas.textContent = `${formatla(ayVerisi.maas)} ₺`;
             gosterGider.textContent = `${formatla(toplamGider)} ₺`;
             gosterKalan.textContent = `${formatla(kalanPara)} ₺`;
 
-            // Kalan para için renklendirme
-            gosterKalan.classList.remove('kalan-pozitif', 'kalan-negatif');
-            if (kalanPara >= 0) {
-                gosterKalan.classList.add('kalan-pozitif');
-            } else {
-                gosterKalan.classList.add('kalan-negatif');
-            }
+            gosterKalan.classList.toggle('kalan-pozitif', kalanPara >= 0);
+            gosterKalan.classList.toggle('kalan-negatif', kalanPara < 0);
 
-            // Gider listesini temizle ve yeniden oluştur
             giderListesi.innerHTML = '';
-            if(mevcutVeri.giderler.length === 0){
-                const li = document.createElement('li');
-                li.textContent = "Henüz gider eklenmedi.";
-                li.style.color = "#888";
-                giderListesi.appendChild(li);
+            if (ayVerisi.giderler.length === 0) {
+                giderListesi.innerHTML = "<li>Bu ay için gider eklenmedi.</li>";
             } else {
-                mevcutVeri.giderler.forEach(gider => {
+                ayVerisi.giderler.forEach(gider => {
                     const li = document.createElement('li');
                     li.innerHTML = `
                         <span>${gider.ad} - <strong>${formatla(gider.miktar)} ₺</strong></span>
@@ -376,46 +369,83 @@
                     giderListesi.appendChild(li);
                 });
             }
-
-            // Silme butonlarına olay dinleyicisi ekle
-            document.querySelectorAll('.sil-btn').forEach(btn => {
-                btn.addEventListener('click', giderSil);
-            });
+            
+            document.querySelectorAll('.sil-btn').forEach(btn => btn.addEventListener('click', giderSil));
         }
 
-        // --- YARDIMCI İŞLEMLER ---
+        function aySeciciyiDoldur() {
+            const mevcutAylar = new Set(Object.keys(tumVeriler));
+            const simdi = new Date();
+            
+            // Son 6 ay, mevcut ay ve gelecek 1 ayı ekle
+            for (let i = 6; i > 0; i--) {
+                const ay = new Date(simdi.getFullYear(), simdi.getMonth() - i, 1);
+                mevcutAylar.add(formatAy(ay));
+            }
+            mevcutAylar.add(formatAy(simdi));
+            const gelecekAy = new Date(simdi.getFullYear(), simdi.getMonth() + 1, 1);
+            mevcutAylar.add(formatAy(gelecekAy));
+
+            const siraliAylar = Array.from(mevcutAylar).sort().reverse();
+            
+            aySecici.innerHTML = '';
+            siraliAylar.forEach(ay => {
+                const option = document.createElement('option');
+                option.value = ay;
+                option.textContent = new Date(ay + '-02').toLocaleDateString('tr-TR', { month: 'long', year: 'numeric' });
+                aySecici.appendChild(option);
+            });
+            aySecici.value = formatAy(simdi);
+        }
+
+        // --- İŞLEM FONKSİYONLARI ---
+        function ayDegistir() {
+            seciliAy = aySecici.value;
+            arayuzuGuncelle();
+        }
 
         function maasiGuncelle() {
             const yeniMaas = parseFloat(maasInput.value);
-            if (!isNaN(yeniMaas) && yeniMaas >= 0) {
-                mevcutVeri.maas = yeniMaas;
-                arayuzuGuncelle();
-                verileriKaydet();
-            } else {
-                 maasInput.value = mevcutVeri.maas > 0 ? mevcutVeri.maas : '';
+            if (isNaN(yeniMaas) || yeniMaas < 0) return;
+
+            if (!tumVeriler[seciliAy]) {
+                tumVeriler[seciliAy] = { maas: 0, giderler: [] };
             }
+            tumVeriler[seciliAy].maas = yeniMaas;
+            arayuzuGuncelle();
+            verileriKaydet();
         }
 
         function giderEkle() {
-            const ad = giderAdiInput.value.trim();
+            const kategori = giderKategoriInput.value;
+            let ad = kategori;
             const miktar = parseFloat(giderMiktariInput.value);
 
-            if (ad === '' || isNaN(miktar) || miktar <= 0) {
-                alert('Lütfen geçerli bir gider adı ve tutarı girin.');
+            if (isNaN(miktar) || miktar <= 0) {
+                alert('Lütfen geçerli bir tutar girin.');
                 return;
             }
 
-            const yeniGider = {
-                ad: ad,
-                miktar: miktar,
-                id: Date.now().toString() // Benzersiz ID için timestamp
-            };
+            if (kategori === 'Diğer') {
+                const digerAd = digerGiderAdiInput.value.trim();
+                if (digerAd === '') {
+                    alert('Lütfen "Diğer" gider için bir açıklama girin.');
+                    return;
+                }
+                ad = `Diğer (${digerAd})`;
+            }
 
-            mevcutVeri.giderler.push(yeniGider);
+            const yeniGider = { ad, miktar, id: Date.now().toString() };
+
+            if (!tumVeriler[seciliAy]) {
+                tumVeriler[seciliAy] = { maas: 0, giderler: [] };
+            }
+            tumVeriler[seciliAy].giderler.push(yeniGider);
             
-            giderAdiInput.value = '';
             giderMiktariInput.value = '';
-            giderAdiInput.focus();
+            digerGiderAdiInput.value = '';
+            giderKategoriInput.value = 'Kira';
+            digerGiderAdiWrapper.style.display = 'none';
             
             arayuzuGuncelle();
             verileriKaydet();
@@ -423,38 +453,39 @@
 
         function giderSil(event) {
             const id = event.target.getAttribute('data-id');
-            mevcutVeri.giderler = mevcutVeri.giderler.filter(gider => gider.id !== id);
-            arayuzuGuncelle();
-            verileriKaydet();
+            if (tumVeriler[seciliAy]) {
+                tumVeriler[seciliAy].giderler = tumVeriler[seciliAy].giderler.filter(gider => gider.id !== id);
+                arayuzuGuncelle();
+                verileriKaydet();
+            }
         }
         
         function verileriDisaAktar() {
+            const ayVerisi = tumVeriler[seciliAy] || { maas: 0, giderler: [] };
             let csvIcerik = "data:text/csv;charset=utf-8,";
             csvIcerik += "Tip,Açıklama,Tutar\n";
-            csvIcerik += `Maaş,Aylık Net Maaş,${mevcutVeri.maas}\n`;
+            csvIcerik += `Maaş,Aylık Net Maaş,${ayVerisi.maas}\n`;
 
-            mevcutVeri.giderler.forEach(gider => {
+            ayVerisi.giderler.forEach(gider => {
                 csvIcerik += `Gider,${gider.ad.replace(/,/g, '')},-${gider.miktar}\n`;
             });
             
-            const toplamGider = mevcutVeri.giderler.reduce((t, g) => t + g.miktar, 0);
-            const kalan = mevcutVeri.maas - toplamGider;
+            const kalan = ayVerisi.maas - ayVerisi.giderler.reduce((t, g) => t + g.miktar, 0);
             csvIcerik += `\nBakiye,Toplam Kalan,${kalan}\n`;
 
-
-            const encodeUri = encodeURI(csvIcerik);
             const link = document.createElement("a");
-            link.setAttribute("href", encodeUri);
-            link.setAttribute("download", "aylik_bütçe.csv");
+            link.setAttribute("href", encodeURI(csvIcerik));
+            link.setAttribute("download", `bütçe_${seciliAy}.csv`);
             document.body.appendChild(link);
-
             link.click();
             document.body.removeChild(link);
         }
 
-        function durumGoster(mesaj, tip, sure = 0) {
+        // --- YARDIMCI FONKSİYONLAR ---
+        function durumGoster(mesaj, tip, sure = 3000) {
             durumMesaji.textContent = mesaj;
             durumMesaji.className = `durum-mesaji durum-${tip}`;
+            durumMesaji.style.display = 'block';
 
             if (sure > 0) {
                 setTimeout(() => {
@@ -463,11 +494,15 @@
             }
         }
 
-        // Sayıları daha okunaklı formatlamak için
         function formatla(sayi) {
-            return new Intl.NumberFormat('tr-TR', { minimumFractionDigits: 2, maximumFractionDigits: 2 }).format(sayi);
+            return new Intl.NumberFormat('tr-TR', { minimumFractionDigits: 2, maximumFractionDigits: 2 }).format(sayi || 0);
         }
-
+        
+        function formatAy(tarih) {
+            const yil = tarih.getFullYear();
+            const ay = (tarih.getMonth() + 1).toString().padStart(2, '0');
+            return `${yil}-${ay}`;
+        }
     </script>
 </body>
 </html>
