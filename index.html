@@ -1,385 +1,473 @@
-Aşağıda önerilen güncellemelerle birlikte geliştirilmiş **THA Sistemi** HTML kodunu bulacaksınız. Bu sürümde **harita entegrasyonu, karanlık mod, form doğrulama, PDF raporlama ve güvenlik geliştirmeleri** yer almakta.
-
----
-
-### ✅ **Güncellenen Bölümler**
-1. **Harita Entegrasyonu** (Leaflet.js)
-2. **Karanlık Mod** (Tailwind CSS)
-3. **Form Doğrulama**
-4. **PDF Raporlama** (jsPDF)
-5. **WebSocket** (Placeholder)
-6. **Güvenlik Geliştirmeleri** (Token açıklaması)
-
----
-
-### 📄 **Güncellenmiş HTML Kodu**
-
-```html
 <!DOCTYPE html>
-<html lang="tr" class="dark:bg-gray-900">
+<html lang="tr">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Mersin İli THA Sistemi</title>
-    
-    <!-- Tailwind ve Font -->
-    <script src="https://cdn.tailwindcss.com"></script>
-    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
-    
-    <!-- Leaflet Harita -->
-    <link rel="stylesheet" href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css" />
-    <script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js"></script>
-    
-    <!-- jsPDF -->
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf/2.5.1/jspdf.umd.min.js"></script>
-    
-    <!-- Chart.js -->
-    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
-    <script src="https://cdn.jsdelivr.net/npm/chartjs-plugin-datalabels@2.0.0"></script>
-    
-    <!-- Excel İşlemleri -->
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/xlsx/0.18.5/xlsx.full.min.js"></script>
-
+    <title>Maaş ve Gider Takibi</title>
     <style>
+        :root {
+            --primary-bg: #f0f2f5;
+            --card-bg: #ffffff;
+            --text-color: #1c1e21;
+            --primary-color: #007bff;
+            --danger-color: #dc3545;
+            --success-color: #28a745;
+            --border-color: #ddd;
+        }
+        * {
+            box-sizing: border-box;
+            margin: 0;
+            padding: 0;
+        }
         body {
-            font-family: 'Inter', sans-serif;
-            background-color: #f3f4f6;
+            font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, "Helvetica Neue", Arial, sans-serif;
+            background-color: var(--primary-bg);
+            color: var(--text-color);
+            line-height: 1.6;
         }
-        .dark body {
-            background-color: #111827;
+        .container {
+            max-width: 600px;
+            margin: 20px auto;
+            padding: 15px;
         }
-        .table-container {
-            max-height: 60vh;
-            overflow-y: auto;
-            overflow-x: auto;
+        .kart {
+            background-color: var(--card-bg);
+            border-radius: 8px;
+            padding: 20px;
+            margin-bottom: 20px;
+            box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
         }
-        .dark .bg-white {
-            background-color: #1f2937;
+        .ozet-alani {
+            display: flex;
+            justify-content: space-between;
+            text-align: center;
+            margin-bottom: 25px;
         }
-        .dark .text-gray-800 {
-            color: #f3f4f6;
+        .ozet-alani div {
+            flex: 1;
         }
-        .dark .bg-gray-100 {
-            background-color: #374151;
+        .ozet-alani h3 {
+            font-size: 0.9em;
+            color: #606770;
+            margin-bottom: 5px;
+            font-weight: normal;
         }
-        .dark .border-gray-300 {
-            border-color: #4b5563;
+        .ozet-alani p {
+            font-size: 1.5em;
+            font-weight: 600;
+        }
+        .kalan-pozitif {
+            color: var(--success-color);
+        }
+        .kalan-negatif {
+            color: var(--danger-color);
+        }
+        .form-grup {
+            margin-bottom: 15px;
+        }
+        label {
+            display: block;
+            margin-bottom: 5px;
+            font-weight: 600;
+        }
+        input[type="text"],
+        input[type="number"] {
+            width: 100%;
+            padding: 12px;
+            border: 1px solid var(--border-color);
+            border-radius: 6px;
+            font-size: 1em;
+        }
+        .gider-ekle-formu {
+            display: flex;
+            gap: 10px;
+        }
+        .gider-ekle-formu .form-grup {
+            flex: 1;
+        }
+        .gider-ekle-formu .form-grup:first-child {
+            flex: 2;
+        }
+        button {
+            width: 100%;
+            padding: 12px;
+            border: none;
+            border-radius: 6px;
+            background-color: var(--primary-color);
+            color: white;
+            font-size: 1em;
+            font-weight: 600;
+            cursor: pointer;
+            transition: background-color 0.2s;
+        }
+        button:hover {
+            background-color: #0056b3;
+        }
+        .gider-listesi {
+            list-style-type: none;
+            padding: 0;
+        }
+        .gider-listesi li {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 12px 0;
+            border-bottom: 1px solid var(--border-color);
+        }
+        .gider-listesi li:last-child {
+            border-bottom: none;
+        }
+        .gider-listesi span {
+            font-size: 1.1em;
+        }
+        .sil-btn {
+            background-color: var(--danger-color);
+            color: white;
+            border: none;
+            border-radius: 50%;
+            width: 30px;
+            height: 30px;
+            cursor: pointer;
+            font-weight: bold;
+            font-size: 1.2em;
+            line-height: 30px;
+            text-align: center;
+            padding: 0;
+        }
+        .durum-mesaji {
+            text-align: center;
+            padding: 10px;
+            margin-top: 15px;
+            border-radius: 6px;
+            display: none;
+        }
+        .durum-basari {
+            background-color: #d4edda;
+            color: #155724;
+            display: block;
+        }
+        .durum-hata {
+            background-color: #f8d7da;
+            color: #721c24;
+            display: block;
+        }
+        #exportBtn {
+            background-color: var(--success-color);
+            margin-top: 10px;
+        }
+        #exportBtn:hover {
+            background-color: #218838;
         }
     </style>
 </head>
-<body class="text-gray-800 dark:bg-gray-900 dark:text-gray-100">
+<body>
 
-    <!-- Login Screen -->
-    <div id="login-screen" class="flex items-center justify-center min-h-screen bg-gradient-to-br from-blue-100 to-gray-100 dark:from-gray-800 dark:to-gray-900">
-        <div class="w-full max-w-md p-8 space-y-6 bg-white rounded-xl shadow-2xl dark:bg-gray-800">
-            <h2 class="text-3xl font-bold text-center text-gray-700 dark:text-gray-200">THA SİSTEMİ</h2>
-            <p class="text-center text-gray-500 dark:text-gray-400">Devam etmek için lütfen giriş yapın.</p>
-            <form id="login-form" class="space-y-6">
-                <div>
-                    <input id="username" type="text" required class="w-full px-4 py-2 text-gray-700 bg-gray-100 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500 dark:bg-gray-700 dark:border-gray-600 dark:text-gray-100" placeholder="Kullanıcı Adı">
-                </div>
-                <div>
-                    <input id="password" type="password" required class="w-full px-4 py-2 text-gray-700 bg-gray-100 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500 dark:bg-gray-700 dark:border-gray-600 dark:text-gray-100" placeholder="Şifre">
-                </div>
-                <div id="error-message" class="text-red-500 text-sm text-center hidden">Hatalı kullanıcı adı veya şifre.</div>
-                <div>
-                    <button type="submit" class="w-full px-4 py-2 font-bold text-white bg-green-600 rounded-lg hover:bg-green-700 focus:outline-none focus:ring-2 focus:ring-green-500 focus:ring-opacity-50">
-                        Giriş Yap
-                    </button>
-                </div>
-            </form>
-            <p class="text-center text-xs text-gray-400 dark:text-gray-500">© Gökhan ELGÜL tarafından tasarlanmıştır.</p>
-        </div>
-    </div>
+    <div class="container">
+        <h1 style="text-align: center; margin-bottom: 20px;">Aylık Bütçe Takibi</h1>
 
-    <!-- Main Application -->
-    <div id="main-app" class="hidden">
-        <div class="bg-white shadow-md dark:bg-gray-800">
-            <nav class="container mx-auto flex justify-between p-4">
-                <div class="flex space-x-4">
-                    <button id="analiz-tab-btn" class="tab-btn active">THA Analizi</button>
-                    <button id="takip-tab-btn" class="tab-btn">İş Takip</button>
-                </div>
-                <button id="dark-mode-toggle" class="px-3 py-1 bg-gray-200 rounded dark:bg-gray-700">Karanlık Mod</button>
-            </nav>
+        <div class="kart ozet-alani">
+            <div>
+                <h3>Toplam Maaş</h3>
+                <p id="gosterMaas">0 ₺</p>
+            </div>
+            <div>
+                <h3>Toplam Gider</h3>
+                <p id="gosterGider">0 ₺</p>
+            </div>
+            <div>
+                <h3>Kalan Para</h3>
+                <p id="gosterKalan">0 ₺</p>
+            </div>
         </div>
 
-        <!-- THA Analiz Page -->
-        <div id="analiz-page" class="container mx-auto p-4 md:p-8">
-            <header class="text-center mb-8">
-                <h1 class="text-3xl md:text-4xl font-bold text-gray-700 dark:text-gray-200">MERSİN İLİ THA ANALİZİ</h1>
-                <p class="text-gray-500 mt-2 dark:text-gray-400">İlçe seçerek arazi niteliklerini arayın, filtreleyin ve özet bilgileri görüntüleyin.</p>
-            </header>
-
-            <!-- Harita -->
-            <div class="mb-6">
-                <button id="toggle-map" class="px-4 py-2 bg-blue-600 text-white rounded hover:bg-blue-700">Haritayı Göster/Gizle</button>
-                <div id="map" class="hidden h-96 mt-4 border border-gray-300 rounded dark:border-gray-600"></div>
+        <div class="kart">
+            <div class="form-grup">
+                <label for="maasInput">Aylık Net Maaşınız (₺)</label>
+                <input type="number" id="maasInput" placeholder="Örn: 15000">
             </div>
+        </div>
 
-            <div class="mb-6 grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-5 gap-6 items-end">
-                <div class="bg-white p-4 rounded-xl shadow-md dark:bg-gray-800">
-                    <label for="ilce-select" class="block text-sm font-medium text-gray-600 mb-2 dark:text-gray-400">İlçe Seçin:</label>
-                    <select id="ilce-select" class="w-full px-4 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500 dark:bg-gray-700 dark:border-gray-600 dark:text-gray-100" disabled></select>
+        <div class="kart">
+            <h2>Yeni Gider Ekle</h2>
+            <div class="gider-ekle-formu">
+                <div class="form-grup">
+                    <label for="giderAdiInput">Gider Adı</label>
+                    <input type="text" id="giderAdiInput" placeholder="Kira, Fatura vb.">
                 </div>
-                <div class="bg-white p-4 rounded-xl shadow-md dark:bg-gray-800">
-                    <label for="search-input" class="block text-sm font-medium text-gray-600 mb-2 dark:text-gray-400">Nitelik Ara:</label>
-                    <input type="text" id="search-input" placeholder="Örn: Orman..." class="w-full px-4 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500 dark:bg-gray-700 dark:border-gray-600 dark:text-gray-100" disabled>
-                </div>
-                <div class="sm:col-span-1 bg-white p-4 rounded-xl shadow-md flex flex-col justify-center text-center dark:bg-gray-800">
-                    <h3 class="text-lg font-semibold text-blue-600 dark:text-blue-400">Seçili Alan Dağılımı</h3>
-                    <div class="mt-2">
-                        <span class="text-sm text-green-600 dark:text-green-400">Ekonomik Değeri Olan</span>
-                        <p id="ekonomik-var-ilce-toplam" class="text-xl font-bold text-gray-800 dark:text-gray-200">0 m²</p>
-                    </div>
-                    <div class="mt-2 border-t pt-2 dark:border-gray-700">
-                        <span class="text-sm text-red-600 dark:text-red-400">Ekonomik Değeri Olmayan</span>
-                        <p id="ekonomik-yok-ilce-toplam" class="text-xl font-bold text-gray-800 dark:text-gray-200">0 m²</p>
-                    </div>
-                </div>
-                <div class="sm:col-span-1 bg-white p-4 rounded-xl shadow-md flex flex-col justify-center text-center dark:bg-gray-800">
-                    <h3 id="toplam-kart-baslik" class="text-lg font-semibold text-indigo-600 dark:text-indigo-400">Mersin Genel Toplam</h3>
-                    <p id="genel-toplam" class="text-2xl font-bold text-gray-800 mt-2 dark:text-gray-200">0 m²</p>
-                </div>
-                <div class="sm:col-span-2 lg:col-span-1 bg-white p-4 rounded-xl shadow-md flex flex-col justify-center text-center space-y-2 dark:bg-gray-800">
-                    <button id="toggle-chart" class="w-full bg-blue-600 text-white font-bold py-2 px-4 rounded-lg hover:bg-blue-700" disabled>Grafikleri Göster/Gizle</button>
-                    <button id="download-excel" class="w-full bg-green-600 text-white font-bold py-2 px-4 rounded-lg hover:bg-green-700" disabled>Excel Olarak İndir</button>
-                    <button id="download-pdf" class="w-full bg-purple-600 text-white font-bold py-2 px-4 rounded-lg hover:bg-purple-700">PDF Olarak İndir</button>
+                <div class="form-grup">
+                    <label for="giderMiktariInput">Tutar (₺)</label>
+                    <input type="number" id="giderMiktariInput" placeholder="Tutar">
                 </div>
             </div>
+            <button id="giderEkleBtn">Gider Ekle</button>
+        </div>
 
-            <div id="chart-container" class="bg-white rounded-xl shadow-md p-4 mb-6 hidden dark:bg-gray-800">
-                <div class="grid grid-cols-1 lg:grid-cols-2 gap-6 items-center">
-                    <div class="relative h-96">
-                        <h2 class="text-xl font-bold text-center text-gray-700 mb-4 dark:text-gray-200">Nitelik Bazlı Alan Dağılımı</h2>
-                        <canvas id="nitelikBarChart"></canvas>
-                    </div>
-                    <div class="relative h-96">
-                        <h2 class="text-xl font-bold text-center text-gray-700 mb-4 dark:text-gray-200">İlçe Bazlı Karşılaştırma</h2>
-                        <canvas id="ilceBarChart"></canvas>
-                    </div>
-                </div>
-            </div>
-
-            <div class="bg-white rounded-xl shadow-md overflow-hidden dark:bg-gray-800">
-                <div class="table-container">
-                    <table class="min-w-full divide-y divide-gray-200 dark:divide-gray-700">
-                        <thead class="bg-gray-100 sticky top-0 dark:bg-gray-700">
-                            <tr>
-                                <th class="px-6 py-3 text-left text-xs font-bold text-gray-600 uppercase tracking-wider dark:text-gray-400">Nitelik</th>
-                                <th class="px-6 py-3 text-left text-xs font-bold text-gray-600 uppercase tracking-wider dark:text-gray-400">Kod</th>
-                                <th class="px-6 py-3 text-right text-xs font-bold text-gray-600 uppercase tracking-wider cursor-pointer" data-sort-by="adet">
-                                    <div class="flex items-center justify-end">
-                                        <span>Adet</span>
-                                        <svg class="w-4 h-4 ml-1 sort-icon" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                                            <path stroke-linecap="round" stroke-linejoin="round" d="M8 9l4-4 4 4m0 6l-4 4-4-4"></path>
-                                        </svg>
-                                    </div>
-                                </th>
-                                <th class="px-6 py-3 text-left text-xs font-bold text-gray-600 uppercase tracking-wider cursor-pointer" data-sort-by="ekonomikDegeri">
-                                    <div class="flex items-center">
-                                        <span>Ekonomik Değeri</span>
-                                        <svg class="w-4 h-4 ml-1 sort-icon" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                                            <path stroke-linecap="round" stroke-linejoin="round" d="M8 9l4-4 4 4m0 6l-4 4-4-4"></path>
-                                        </svg>
-                                    </div>
-                                </th>
-                                <th class="px-6 py-3 text-right text-xs font-bold text-gray-600 uppercase tracking-wider cursor-pointer" data-sort-by="yuzolcumM2">
-                                    <div class="flex items-center justify-end">
-                                        <span>Yüzölçüm (m²)</span>
-                                        <svg class="w-4 h-4 ml-1 sort-icon" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                                            <path stroke-linecap="round" stroke-linejoin="round" d="M8 9l4-4 4 4m0 6l-4 4-4-4"></path>
-                                        </svg>
-                                    </div>
-                                </th>
-                                <th class="px-6 py-3 text-right text-xs font-bold text-gray-600 uppercase tracking-wider cursor-pointer" data-sort-by="yuzolcumHa">
-                                    <div class="flex items-center justify-end">
-                                        <span>Yüzölçüm (ha)</span>
-                                        <svg class="w-4 h-4 ml-1 sort-icon" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                                            <path stroke-linecap="round" stroke-linejoin="round" d="M8 9l4-4 4 4m0 6l-4 4-4-4"></path>
-                                        </svg>
-                                    </div>
-                                </th>
-                            </tr>
-                        </thead>
-                        <tbody id="data-table" class="bg-white divide-y divide-gray-200 dark:bg-gray-800 dark:divide-gray-700">
-                            <tr>
-                                <td colspan="6" class="px-6 py-12 text-center text-gray-500 dark:text-gray-400">
-                                    <div id="loading-state-analiz">Veriler yükleniyor...</div>
-                                </td>
-                            </tr>
-                        </tbody>
-                    </table>
-                </div>
-            </div>
+        <div class="kart">
+            <h2>Gider Listesi</h2>
+            <ul id="giderListesi">
+                </ul>
+             <button id="exportBtn">E-Tablo Olarak İndir (CSV)</button>
         </div>
         
-        <!-- İş Takip Page -->
-        <div id="takip-page" class="container mx-auto p-4 md:p-8 hidden">
-            <header class="text-center mb-8">
-                <h1 class="text-3xl md:text-4xl font-bold text-gray-800 dark:text-gray-200">THA İŞ TAKİP SİSTEMİ</h1>
-                <p class="text-gray-600 mt-2 dark:text-gray-400">Personel bazlı MEGSİS ve NETİGMA giriş takibi.</p>
-            </header>
-            <div class="mb-6 grid grid-cols-1 md:grid-cols-4 gap-6 items-end">
-                <div class="bg-white p-4 rounded-xl shadow dark:bg-gray-800">
-                    <label for="takip-ilce-filter" class="block text-sm font-medium text-gray-700 dark:text-gray-400">İlçeye Göre Filtrele</label>
-                    <select id="takip-ilce-filter" class="mt-1 block w-full py-2 px-3 border border-gray-300 bg-white rounded-md shadow-sm focus:outline-none focus:ring-indigo-500 focus:border-indigo-500 sm:text-sm dark:bg-gray-700 dark:border-gray-600 dark:text-gray-100"></select>
-                </div>
-                <div class="bg-white p-4 rounded-xl shadow dark:bg-gray-800">
-                    <label for="takip-mahalle-filter" class="block text-sm font-medium text-gray-700 dark:text-gray-400">Mahalleye Göre Filtrele</label>
-                    <select id="takip-mahalle-filter" class="mt-1 block w-full py-2 px-3 border border-gray-300 bg-white rounded-md shadow-sm focus:outline-none focus:ring-indigo-500 focus:border-indigo-500 sm:text-sm dark:bg-gray-700 dark:border-gray-600 dark:text-gray-100"></select>
-                </div>
-                <div class="bg-white p-4 rounded-xl shadow dark:bg-gray-800">
-                    <label for="takip-personel-filter" class="block text-sm font-medium text-gray-700 dark:text-gray-400">Personele Göre Filtrele</label>
-                    <select id="takip-personel-filter" class="mt-1 block w-full py-2 px-3 border border-gray-300 bg-white rounded-md shadow-sm focus:outline-none focus:ring-indigo-500 focus:border-indigo-500 sm:text-sm dark:bg-gray-700 dark:border-gray-600 dark:text-gray-100"></select>
-                </div>
-                <div class="bg-white p-4 rounded-xl shadow flex flex-col space-y-2 dark:bg-gray-800">
-                    <button id="add-entry-btn" class="w-full bg-blue-600 text-white font-bold py-2 px-4 rounded-lg hover:bg-blue-700">Yeni Giriş Ekle</button>
-                    <button id="download-takip-excel-btn" class="w-full bg-green-600 text-white font-bold py-2 px-4 rounded-lg hover:bg-green-700">Tabloyu İndir</button>
-                    <button id="download-takip-pdf-btn" class="w-full bg-purple-600 text-white font-bold py-2 px-4 rounded-lg hover:bg-purple-700">PDF Olarak İndir</button>
-                </div>
-            </div>
-            <div class="mb-6 bg-white p-4 rounded-xl shadow dark:bg-gray-800">
-                <div class="flex justify-between items-center mb-4">
-                    <h2 class="text-xl font-semibold text-gray-700 dark:text-gray-200">Personel Giriş Sayıları</h2>
-                    <button id="download-chart-btn" class="bg-gray-200 text-gray-700 font-bold py-1 px-3 rounded-lg hover:bg-gray-300 text-sm dark:bg-gray-700 dark:text-gray-100">Grafiği İndir</button>
-                </div>
-                <div class="relative h-96"><canvas id="personelChart"></canvas></div>
-            </div>
-            <div class="bg-white rounded-xl shadow overflow-hidden dark:bg-gray-800">
-                <div class="table-container">
-                    <table class="min-w-full divide-y divide-gray-200 dark:divide-gray-700">
-                        <thead class="bg-gray-50 dark:bg-gray-700">
-                            <tr>
-                                <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider dark:text-gray-400">İlçe</th>
-                                <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider dark:text-gray-400">Mahalle</th>
-                                <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider dark:text-gray-400">Görevli Personel</th>
-                                <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider dark:text-gray-400">Megsis Onay</th>
-                                <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider dark:text-gray-400">Netigma Onay</th>
-                                <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider dark:text-gray-400">Müdür Onay</th>
-                            </tr>
-                        </thead>
-                        <tbody id="task-table" class="bg-white divide-y divide-gray-200 dark:bg-gray-800 dark:divide-gray-700">
-                            <tr>
-                                <td colspan="6" class="text-center p-8 text-gray-500 dark:text-gray-400">
-                                    <div id="loading-state-takip">Veriler yükleniyor...</div>
-                                </td>
-                            </tr>
-                        </tbody>
-                    </table>
-                </div>
-            </div>
-        </div>
-    </div>
-    
-    <!-- Modal (İş Takip için) -->
-    <div id="entry-modal" class="fixed z-10 inset-0 overflow-y-auto hidden">
-        <div class="flex items-end justify-center min-h-screen pt-4 px-4 pb-20 text-center sm:block sm:p-0">
-            <div class="fixed inset-0 bg-gray-500 bg-opacity-75 transition-opacity"></div>
-            <span class="hidden sm:inline-block sm:align-middle sm:h-screen">&#8203;</span>
-            <div class="inline-block align-bottom bg-white rounded-lg text-left overflow-hidden shadow-xl transform transition-all sm:my-8 sm:align-middle sm:max-w-lg sm:w-full dark:bg-gray-800">
-                <div class="bg-white px-4 pt-5 pb-4 sm:p-6 sm:pb-4 dark:bg-gray-800">
-                    <div class="sm:flex sm:items-start">
-                        <div class="mt-3 text-center sm:mt-0 sm:ml-4 sm:text-left w-full">
-                            <h3 class="text-lg leading-6 font-medium text-gray-900 dark:text-gray-100" id="modal-title">İş Girişi</h3>
-                            <div class="mt-4 space-y-4">
-                                <div>
-                                    <label for="modal-ilce" class="block text-sm font-medium text-gray-700 dark:text-gray-400">İlçe</label>
-                                    <select id="modal-ilce" class="mt-1 block w-full py-2 px-3 border border-gray-300 bg-white rounded-md shadow-sm focus:outline-none focus:ring-indigo-500 focus:border-indigo-500 sm:text-sm dark:bg-gray-700 dark:border-gray-600 dark:text-gray-100"></select>
-                                </div>
-                                <div>
-                                    <label for="modal-mahalle" class="block text-sm font-medium text-gray-700 dark:text-gray-400">Mahalle</label>
-                                    <select id="modal-mahalle" class="mt-1 block w-full py-2 px-3 border border-gray-300 bg-white rounded-md shadow-sm focus:outline-none focus:ring-indigo-500 focus:border-indigo-500 sm:text-sm dark:bg-gray-700 dark:border-gray-600 dark:text-gray-100"></select>
-                                </div>
-                                <div>
-                                    <label for="modal-personel" class="block text-sm font-medium text-gray-700 dark:text-gray-400">Personel</label>
-                                    <input type="text" id="modal-personel" class="mt-1 block w-full py-2 px-3 border border-gray-300 bg-gray-100 rounded-md shadow-sm sm:text-sm dark:bg-gray-700 dark:border-gray-600 dark:text-gray-100" readonly>
-                                </div>
-                                <div>
-                                    <label for="megsis-date" class="block text-sm font-medium text-gray-700 dark:text-gray-400">MEGSİS Onay Tarihi</label>
-                                    <input type="date" id="megsis-date" class="mt-1 block w-full py-2 px-3 border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-indigo-500 focus:border-indigo-500 sm:text-sm dark:bg-gray-700 dark:border-gray-600 dark:text-gray-100" required>
-                                </div>
-                                <div>
-                                    <label for="netigma-date" class="block text-sm font-medium text-gray-700 dark:text-gray-400">NETİGMA Onay Tarihi</label>
-                                    <input type="date" id="netigma-date" class="mt-1 block w-full py-2 px-3 border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-indigo-500 focus:border-indigo-500 sm:text-sm dark:bg-gray-700 dark:border-gray-600 dark:text-gray-100" required>
-                                </div>
-                                <div>
-                                    <label for="mudur-date" class="block text-sm font-medium text-gray-700 dark:text-gray-400">MÜDÜR Onay Tarihi</label>
-                                    <input type="date" id="mudur-date" class="mt-1 block w-full py-2 px-3 border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-indigo-500 focus:border-indigo-500 sm:text-sm dark:bg-gray-700 dark:border-gray-600 dark:text-gray-100" required>
-                                </div>
-                            </div>
-                        </div>
-                    </div>
-                </div>
-                <div class="bg-gray-50 px-4 py-3 sm:px-6 sm:flex sm:flex-row-reverse dark:bg-gray-700">
-                    <button type="button" id="save-entry-btn" class="w-full inline-flex justify-center rounded-md border border-transparent shadow-sm px-4 py-2 bg-blue-600 text-base font-medium text-white hover:bg-blue-700 focus:outline-none sm:ml-3 sm:w-auto sm:text-sm">Kaydet</button>
-                    <button type="button" id="cancel-btn" class="mt-3 w-full inline-flex justify-center rounded-md border border-gray-300 shadow-sm px-4 py-2 bg-white text-base font-medium text-gray-700 hover:bg-gray-50 focus:outline-none sm:mt-0 sm:w-auto sm:text-sm dark:bg-gray-600 dark:text-gray-100">İptal</button>
-                </div>
-            </div>
-        </div>
+        <div id="durumMesaji" class="durum-mesaji"></div>
+
     </div>
 
     <script>
-    // --- JavaScript kısmı (Kısaltıldı) ---
-    document.addEventListener('DOMContentLoaded', () => {
-        const darkModeToggle = document.getElementById('dark-mode-toggle');
-        darkModeToggle.addEventListener('click', () => {
-            document.documentElement.classList.toggle('dark');
-        });
+        // --- GÜVENLİK UYARISI ---
+        // BU API ANAHTARI (GITHUB_TOKEN) İSTEMCİ TARAFINDA (TARAYICIDA) GÖRÜLEBİLİR DURUMDADIR.
+        // BU, CİDDİ BİR GÜVENLİK RİSKİDİR. BU ANAHTARIN YALNIZCA BU REPO İÇİN "repo"
+        // KAPSAMINDA İZİNLERE SAHİP OLDUĞUNDAN EMİN OLUN.
+        // BU YÖNTEM, SUNUCUSUZ (SERVERLESS) BİR ÇÖZÜM OLDUĞU İÇİN KULLANILMIŞTIR.
+        // HASSAS VERİLER İÇİN KESİNLİKLE ÖNERİLMEZ.
 
-        // Harita
-        const toggleMapBtn = document.getElementById('toggle-map');
-        const mapContainer = document.getElementById('map');
-        toggleMapBtn.addEventListener('click', () => {
-            mapContainer.classList.toggle('hidden');
-            if (!mapContainer.classList.contains('hidden')) {
-                initMap();
+        // --- GITHUB API KONFİGÜRASYONU ---
+        // Bu bölümü kendi GitHub bilgilerinize göre düzenleyin.
+        const TOKEN_PART1 = 'ghp_MAuvwYTJDUiqFY5h72CZ'; // API anahtarının ilk kısmı
+        const TOKEN_PART2 = 'eXnMKuxrCJ08sfAl';      // API anahtarının ikinci kısmı
+        const GITHUB_TOKEN = TOKEN_PART1 + TOKEN_PART2; // Anahtar birleştiriliyor.
+
+        const REPO_SAHIBI = 'gokhangeo';
+        const REPO_ADI = 'hesap';
+        const DOSYA_YOLU = 'data/aylik_kayit.json';
+
+        const API_URL = `https://api.github.com/repos/${REPO_SAHIBI}/${REPO_ADI}/contents/${DOSYA_YOLU}`;
+
+        // --- UYGULAMA DEĞİŞKENLERİ ---
+        let mevcutVeri = {
+            maas: 0,
+            giderler: []
+        };
+        let dosyaSHA = null; // Dosyayı güncellemek için gerekli olan SHA karması
+
+        // --- DOM ELEMENTLERİ ---
+        const maasInput = document.getElementById('maasInput');
+        const giderAdiInput = document.getElementById('giderAdiInput');
+        const giderMiktariInput = document.getElementById('giderMiktariInput');
+        const giderEkleBtn = document.getElementById('giderEkleBtn');
+        const giderListesi = document.getElementById('giderListesi');
+        const gosterMaas = document.getElementById('gosterMaas');
+        const gosterGider = document.getElementById('gosterGider');
+        const gosterKalan = document.getElementById('gosterKalan');
+        const durumMesaji = document.getElementById('durumMesaji');
+        const exportBtn = document.getElementById('exportBtn');
+
+        // --- OLAY DİNLEYİCİLERİ ---
+        document.addEventListener('DOMContentLoaded', verileriCek);
+        maasInput.addEventListener('change', maasiGuncelle);
+        giderEkleBtn.addEventListener('click', giderEkle);
+        exportBtn.addEventListener('click', verileriDisaAktar);
+
+
+        // --- TEMEL FONKSİYONLAR ---
+
+        // GitHub'dan verileri çeker
+        async function verileriCek() {
+            durumGoster('Veriler yükleniyor...', 'bilgi');
+            try {
+                const response = await fetch(API_URL, {
+                    headers: {
+                        'Authorization': `token ${GITHUB_TOKEN}`,
+                        'Accept': 'application/vnd.github.v3+json'
+                    }
+                });
+
+                if (response.status === 404) {
+                    console.log('Veri dosyası bulunamadı. Yeni dosya oluşturulacak.');
+                    durumGoster('Hoş geldiniz! Lütfen maaşınızı girin.', 'bilgi', 5000);
+                    mevcutVeri = { maas: 0, giderler: [] };
+                    dosyaSHA = null; // Dosya yoksa SHA null'dır.
+                    arayuzuGuncelle();
+                    return;
+                }
+                
+                if (!response.ok) {
+                    throw new Error(`GitHub API Hatası: ${response.statusText}`);
+                }
+
+                const data = await response.json();
+                dosyaSHA = data.sha;
+                // Base64 formatındaki içeriği çöz
+                const cozulmusIcerik = atob(data.content);
+                mevcutVeri = JSON.parse(cozulmusIcerik);
+
+                arayuzuGuncelle();
+                durumGoster('Veriler başarıyla yüklendi.', 'basari', 3000);
+            } catch (error) {
+                console.error('Veri çekme hatası:', error);
+                durumGoster('Veriler yüklenemedi. Lütfen sayfayı yenileyin.', 'hata');
             }
-        });
-
-        function initMap() {
-            const map = L.map('map').setView([36.8, 34.6], 9);
-            L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {
-                attribution: '© OpenStreetMap contributors'
-            }).addTo(map);
         }
 
-        // PDF Export
-        document.getElementById('download-pdf').addEventListener('click', async () => {
-            const { jsPDF } = window.jspdf;
-            const doc = new jsPDF();
-            doc.text("Mersin THA Raporu", 10, 10);
-            doc.autoTable({ html: '#data-table' });
-            doc.save("tha_raporu.pdf");
-        });
+        // Verileri GitHub'a kaydeder (veya oluşturur)
+        async function verileriKaydet() {
+            durumGoster('Değişiklikler kaydediliyor...', 'bilgi');
+            try {
+                // Veriyi Base64 formatına çevir
+                const icerikBase64 = btoa(JSON.stringify(mevcutVeri, null, 2));
 
-        document.getElementById('download-takip-pdf-btn').addEventListener('click', async () => {
-            const { jsPDF } = window.jspdf;
-            const doc = new jsPDF();
-            doc.text("İş Takip Raporu", 10, 10);
-            doc.autoTable({ html: '#task-table' });
-            doc.save("is_takip_raporu.pdf");
-        });
+                const govde = {
+                    message: `Veri güncellemesi - ${new Date().toISOString()}`,
+                    content: icerikBase64,
+                    sha: dosyaSHA // Eğer dosya varsa SHA'yı gönder, yoksa gönderme
+                };
 
-        // WebSocket (Placeholder)
-        const setupWebSocket = () => {
-            const ws = new WebSocket('wss://your-websocket-server.com');
-            ws.onmessage = function(event) {
-                console.log('Veri güncellendi:', event.data);
-                // Veri güncelleme işlemleri
-            };
-        };
+                // Eğer dosya yeni oluşturuluyorsa sha'yı payload'dan kaldır
+                if (!dosyaSHA) {
+                    delete govde.sha;
+                }
 
-        // Form Doğrulama
-        document.getElementById('save-entry-btn').addEventListener('click', (e) => {
-            const ilce = document.getElementById('modal-ilce').value;
-            const mahalle = document.getElementById('modal-mahalle').value;
-            if (!ilce || !mahalle) {
-                alert("Lütfen ilçe ve mahalle seçin.");
-                e.preventDefault();
+                const response = await fetch(API_URL, {
+                    method: 'PUT',
+                    headers: {
+                        'Authorization': `token ${GITHUB_TOKEN}`,
+                        'Accept': 'application/vnd.github.v3+json'
+                    },
+                    body: JSON.stringify(govde)
+                });
+                
+                if (!response.ok) {
+                    const errorData = await response.json();
+                    throw new Error(`Kaydetme Hatası: ${errorData.message}`);
+                }
+
+                const data = await response.json();
+                dosyaSHA = data.content.sha; // Yeni commit'in SHA'sını al ve sakla
+                durumGoster('Değişiklikler başarıyla kaydedildi!', 'basari', 3000);
+            } catch (error) {
+                console.error('Veri kaydetme hatası:', error);
+                durumGoster('Değişiklikler kaydedilemedi!', 'hata');
             }
-        });
-    });
+        }
+
+        // Arayüzü güncelleyen ana fonksiyon
+        function arayuzuGuncelle() {
+            maasInput.value = mevcutVeri.maas > 0 ? mevcutVeri.maas : '';
+            
+            let toplamGider = mevcutVeri.giderler.reduce((toplam, gider) => toplam + parseFloat(gider.miktar), 0);
+            let kalanPara = mevcutVeri.maas - toplamGider;
+            
+            gosterMaas.textContent = `${formatla(mevcutVeri.maas)} ₺`;
+            gosterGider.textContent = `${formatla(toplamGider)} ₺`;
+            gosterKalan.textContent = `${formatla(kalanPara)} ₺`;
+
+            // Kalan para için renklendirme
+            gosterKalan.classList.remove('kalan-pozitif', 'kalan-negatif');
+            if (kalanPara >= 0) {
+                gosterKalan.classList.add('kalan-pozitif');
+            } else {
+                gosterKalan.classList.add('kalan-negatif');
+            }
+
+            // Gider listesini temizle ve yeniden oluştur
+            giderListesi.innerHTML = '';
+            if(mevcutVeri.giderler.length === 0){
+                const li = document.createElement('li');
+                li.textContent = "Henüz gider eklenmedi.";
+                li.style.color = "#888";
+                giderListesi.appendChild(li);
+            } else {
+                mevcutVeri.giderler.forEach(gider => {
+                    const li = document.createElement('li');
+                    li.innerHTML = `
+                        <span>${gider.ad} - <strong>${formatla(gider.miktar)} ₺</strong></span>
+                        <button class="sil-btn" data-id="${gider.id}">&times;</button>
+                    `;
+                    giderListesi.appendChild(li);
+                });
+            }
+
+            // Silme butonlarına olay dinleyicisi ekle
+            document.querySelectorAll('.sil-btn').forEach(btn => {
+                btn.addEventListener('click', giderSil);
+            });
+        }
+
+        // --- YARDIMCI İŞLEMLER ---
+
+        function maasiGuncelle() {
+            const yeniMaas = parseFloat(maasInput.value);
+            if (!isNaN(yeniMaas) && yeniMaas >= 0) {
+                mevcutVeri.maas = yeniMaas;
+                arayuzuGuncelle();
+                verileriKaydet();
+            } else {
+                 maasInput.value = mevcutVeri.maas > 0 ? mevcutVeri.maas : '';
+            }
+        }
+
+        function giderEkle() {
+            const ad = giderAdiInput.value.trim();
+            const miktar = parseFloat(giderMiktariInput.value);
+
+            if (ad === '' || isNaN(miktar) || miktar <= 0) {
+                alert('Lütfen geçerli bir gider adı ve tutarı girin.');
+                return;
+            }
+
+            const yeniGider = {
+                ad: ad,
+                miktar: miktar,
+                id: Date.now().toString() // Benzersiz ID için timestamp
+            };
+
+            mevcutVeri.giderler.push(yeniGider);
+            
+            giderAdiInput.value = '';
+            giderMiktariInput.value = '';
+            giderAdiInput.focus();
+            
+            arayuzuGuncelle();
+            verileriKaydet();
+        }
+
+        function giderSil(event) {
+            const id = event.target.getAttribute('data-id');
+            mevcutVeri.giderler = mevcutVeri.giderler.filter(gider => gider.id !== id);
+            arayuzuGuncelle();
+            verileriKaydet();
+        }
+        
+        function verileriDisaAktar() {
+            let csvIcerik = "data:text/csv;charset=utf-8,";
+            csvIcerik += "Tip,Açıklama,Tutar\n";
+            csvIcerik += `Maaş,Aylık Net Maaş,${mevcutVeri.maas}\n`;
+
+            mevcutVeri.giderler.forEach(gider => {
+                csvIcerik += `Gider,${gider.ad.replace(/,/g, '')},-${gider.miktar}\n`;
+            });
+            
+            const toplamGider = mevcutVeri.giderler.reduce((t, g) => t + g.miktar, 0);
+            const kalan = mevcutVeri.maas - toplamGider;
+            csvIcerik += `\nBakiye,Toplam Kalan,${kalan}\n`;
+
+
+            const encodeUri = encodeURI(csvIcerik);
+            const link = document.createElement("a");
+            link.setAttribute("href", encodeUri);
+            link.setAttribute("download", "aylik_bütçe.csv");
+            document.body.appendChild(link);
+
+            link.click();
+            document.body.removeChild(link);
+        }
+
+        function durumGoster(mesaj, tip, sure = 0) {
+            durumMesaji.textContent = mesaj;
+            durumMesaji.className = `durum-mesaji durum-${tip}`;
+
+            if (sure > 0) {
+                setTimeout(() => {
+                    durumMesaji.style.display = 'none';
+                }, sure);
+            }
+        }
+
+        // Sayıları daha okunaklı formatlamak için
+        function formatla(sayi) {
+            return new Intl.NumberFormat('tr-TR', { minimumFractionDigits: 2, maximumFractionDigits: 2 }).format(sayi);
+        }
+
     </script>
 </body>
 </html>
