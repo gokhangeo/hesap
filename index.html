@@ -6,8 +6,8 @@
     <title>Aylık Maaş ve Gider Takibi</title>
     <style>
         :root {
-            --primary-bg-start: #f8fafc;
-            --primary-bg-end: #e2e8f0;
+            --primary-bg-start: #f0f4f8;
+            --primary-bg-end: #d9e2ec;
             --card-bg: #ffffff;
             --text-color: #1c1e21;
             --primary-color-start: #0d6efd;
@@ -29,7 +29,59 @@
             background: linear-gradient(to top right, var(--primary-bg-end), var(--primary-bg-start));
             color: var(--text-color);
             line-height: 1.6;
+            transition: background 0.5s ease;
         }
+        .hidden {
+            display: none !important;
+        }
+
+        /* --- GİRİŞ EKRANI STİLLERİ --- */
+        #loginScreen {
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            height: 100vh;
+            padding: 15px;
+        }
+        .login-kart {
+            width: 100%;
+            max-width: 400px;
+            background-color: var(--card-bg);
+            padding: 40px 30px;
+            border-radius: 12px;
+            box-shadow: 0 8px 30px rgba(0,0,0,0.12);
+            text-align: center;
+        }
+        .login-kart h1 {
+            color: #333;
+            margin-bottom: 10px;
+            font-size: 1.8em;
+        }
+        .login-kart p {
+            color: #6c757d;
+            margin-bottom: 30px;
+        }
+        .login-kart .form-grup {
+            margin-bottom: 20px;
+            text-align: left;
+        }
+        #loginBtn {
+             background: linear-gradient(45deg, var(--success-color-start), var(--success-color-end));
+        }
+        .login-kart.error input {
+            border-color: var(--danger-color-start);
+        }
+        .login-kart.error {
+            animation: shake 0.5s;
+        }
+        @keyframes shake {
+            0%, 100% { transform: translateX(0); }
+            10%, 30%, 50%, 70%, 90% { transform: translateX(-5px); }
+            20%, 40%, 60%, 80% { transform: translateX(5px); }
+        }
+
+
+        /* --- ANA UYGULAMA STİLLERİ --- */
         .container {
             max-width: 600px;
             margin: 20px auto;
@@ -52,11 +104,18 @@
             display: flex;
             justify-content: space-between;
             align-items: center;
+            gap: 10px;
+            flex-wrap: wrap;
             margin-bottom: 20px;
         }
         .baslik-bolumu h1 {
             font-size: 1.6em;
             color: #333;
+        }
+        .ust-menu {
+            display: flex;
+            align-items: center;
+            gap: 15px;
         }
         .ozet-alani {
             display: flex;
@@ -64,32 +123,17 @@
             text-align: center;
             margin-bottom: 25px;
         }
-        .ozet-alani div {
-            flex: 1;
-            padding: 0 5px;
-        }
-        .ozet-alani h3 {
-            font-size: 0.9em;
-            color: #606770;
-            margin-bottom: 5px;
-            font-weight: 500;
-        }
-        .ozet-alani p {
-            font-size: 1.5em;
-            font-weight: 700;
-        }
+        .ozet-alani div { flex: 1; padding: 0 5px; }
+        .ozet-alani h3 { font-size: 0.9em; color: #606770; margin-bottom: 5px; font-weight: 500; }
+        .ozet-alani p { font-size: 1.5em; font-weight: 700; }
         .kalan-pozitif { color: var(--success-color-start); }
         .kalan-negatif { color: var(--danger-color-start); }
 
         .form-grup { margin-bottom: 15px; }
-        label {
-            display: block;
-            margin-bottom: 8px;
-            font-weight: 600;
-            color: #495057;
-        }
+        label { display: block; margin-bottom: 8px; font-weight: 600; color: #495057; }
         input[type="text"],
         input[type="number"],
+        input[type="password"],
         select {
             width: 100%;
             padding: 12px 15px;
@@ -105,11 +149,7 @@
             box-shadow: 0 0 0 3px rgba(13, 110, 253, 0.2);
             background-color: #fff;
         }
-        .gider-ekle-formu {
-            display: grid;
-            grid-template-columns: 1fr 1fr;
-            gap: 15px;
-        }
+        .gider-ekle-formu { display: grid; grid-template-columns: 1fr 1fr; gap: 15px; }
         #digerGiderAdiWrapper { grid-column: 1 / -1; }
         button {
             width: 100%;
@@ -123,75 +163,54 @@
             transition: all 0.2s ease-in-out;
             box-shadow: 0 2px 5px rgba(0, 0, 0, 0.2);
         }
-        button:hover {
-            transform: translateY(-2px);
-            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.3);
-        }
-        #giderEkleBtn {
-            background: linear-gradient(45deg, var(--primary-color-start), var(--primary-color-end));
-        }
-        .gider-listesi {
-            list-style-type: none;
-            padding: 0;
-        }
-        .gider-listesi li {
-            display: flex;
-            justify-content: space-between;
-            align-items: center;
-            padding: 14px 5px;
-            border-bottom: 1px solid var(--border-color);
-        }
+        button:hover { transform: translateY(-2px); box-shadow: 0 4px 8px rgba(0, 0, 0, 0.3); }
+        #giderEkleBtn { background: linear-gradient(45deg, var(--primary-color-start), var(--primary-color-end)); }
+        .gider-listesi { list-style-type: none; padding: 0; }
+        .gider-listesi li { display: flex; justify-content: space-between; align-items: center; padding: 14px 5px; border-bottom: 1px solid var(--border-color); }
         .gider-listesi li:last-child { border-bottom: none; }
         .gider-listesi span { font-size: 1.1em; }
-        .sil-btn {
-            background: linear-gradient(45deg, var(--danger-color-start), var(--danger-color-end));
-            border: none;
-            border-radius: 50%;
-            width: 32px;
-            height: 32px;
-            cursor: pointer;
-            font-weight: bold;
-            font-size: 1.2em;
-            line-height: 32px;
-            text-align: center;
-            padding: 0;
+        #logoutBtn {
+            background: linear-gradient(45deg, #6c757d, #343a40);
+            padding: 8px 14px;
+            font-size: 0.9em;
+            width: auto;
         }
-        .durum-mesaji {
-            text-align: center;
-            padding: 12px 20px;
-            border-radius: 8px;
-            position: fixed;
-            bottom: 20px;
-            left: 50%;
-            transform: translate(-50%, 20px);
-            z-index: 100;
-            box-shadow: 0 4px 8px rgba(0,0,0,0.2);
-            opacity: 0;
-            visibility: hidden;
-            transition: all 0.4s ease;
-        }
-        .durum-mesaji.visible {
-            opacity: 1;
-            visibility: visible;
-            transform: translate(-50%, 0);
-        }
+        .sil-btn { background: linear-gradient(45deg, var(--danger-color-start), var(--danger-color-end)); border: none; border-radius: 50%; width: 32px; height: 32px; cursor: pointer; font-weight: bold; font-size: 1.2em; line-height: 32px; text-align: center; padding: 0; }
+        .durum-mesaji { text-align: center; padding: 12px 20px; border-radius: 8px; position: fixed; bottom: 20px; left: 50%; transform: translate(-50%, 20px); z-index: 100; box-shadow: 0 4px 8px rgba(0,0,0,0.2); opacity: 0; visibility: hidden; transition: all 0.4s ease; }
+        .durum-mesaji.visible { opacity: 1; visibility: visible; transform: translate(-50%, 0); }
         .durum-bilgi { background-color: #e2e3e5; color: #383d41;}
         .durum-basari { background: linear-gradient(45deg, #d1e7dd, #b3d9c4); color: #0a3622; border: 1px solid var(--success-color-end); }
         .durum-hata { background: linear-gradient(45deg, #f8d7da, #f1c2c5); color: #58151c; border: 1px solid var(--danger-color-end);}
-        #exportBtn {
-            background: linear-gradient(45deg, var(--success-color-start), var(--success-color-end));
-            margin-top: 15px;
-        }
+        #exportBtn { background: linear-gradient(45deg, var(--success-color-start), var(--success-color-end)); margin-top: 15px; }
     </style>
 </head>
 <body>
 
-    <div class="container">
+    <div id="loginScreen">
+        <div class="login-kart">
+            <h1>MEGSİS İŞ TAKİP</h1>
+            <p>Devam etmek için lütfen giriş yapın.</p>
+            <div class="form-grup">
+                <label for="usernameInput">Kullanıcı Adı</label>
+                <input type="text" id="usernameInput" value="4G">
+            </div>
+            <div class="form-grup">
+                <label for="passwordInput">Şifre</label>
+                <input type="password" id="passwordInput" value="503344">
+            </div>
+            <button id="loginBtn">Giriş Yap</button>
+        </div>
+    </div>
+
+    <div class="container hidden">
         <div class="baslik-bolumu">
             <h1>Bütçe Takibi</h1>
-            <div class="form-grup" style="margin-bottom: 0; min-width: 150px;">
-                <label for="aySecici" style="margin-bottom: 2px;">Ay Seçin</label>
-                <select id="aySecici"></select>
+            <div class="ust-menu">
+                <div class="form-grup" style="margin-bottom: 0;">
+                    <label for="aySecici" style="margin-bottom: 2px;">Ay Seçin</label>
+                    <select id="aySecici"></select>
+                </div>
+                <button id="logoutBtn">Çıkış Yap</button>
             </div>
         </div>
 
@@ -254,6 +273,10 @@
     <div id="durumMesaji" class="durum-mesaji"></div>
 
     <script>
+        // --- KİMLİK BİLGİLERİ ---
+        const DOGRU_KULLANICI_ADI = '4G';
+        const DOGRU_SIFRE = '503344';
+        
         // --- GÜVENLİK UYARISI ---
         // BU API ANAHTARI İSTEMCİ TARAFINDA (TARAYICIDA) GÖRÜLEBİLİR DURUMDADIR. BU, CİDDİ BİR GÜVENLİK RİSKİDİR.
         // HASSAS VERİLER İÇİN KESİNLİKLE ÖNERİLMEZ.
@@ -274,8 +297,15 @@
         let dosyaSHA = null;
         let durumTimeout;
 
-
         // --- DOM ELEMENTLERİ ---
+        const loginScreen = document.getElementById('loginScreen');
+        const loginKart = document.querySelector('.login-kart');
+        const usernameInput = document.getElementById('usernameInput');
+        const passwordInput = document.getElementById('passwordInput');
+        const loginBtn = document.getElementById('loginBtn');
+        const logoutBtn = document.getElementById('logoutBtn');
+        const appContainer = document.querySelector('.container');
+
         const aySecici = document.getElementById('aySecici');
         const maasInput = document.getElementById('maasInput');
         const giderKategoriInput = document.getElementById('giderKategoriInput');
@@ -292,7 +322,14 @@
         const giderListesiBaslik = document.getElementById('giderListesiBaslik');
 
         // --- OLAY DİNLEYİCİLERİ ---
-        document.addEventListener('DOMContentLoaded', baslat);
+        loginBtn.addEventListener('click', girisYap);
+        logoutBtn.addEventListener('click', cikisYap);
+        passwordInput.addEventListener('keypress', function(event) {
+            if (event.key === 'Enter') {
+                girisYap();
+            }
+        });
+
         aySecici.addEventListener('change', ayDegistir);
         maasInput.addEventListener('change', maasiGuncelle);
         giderEkleBtn.addEventListener('click', giderEkle);
@@ -300,6 +337,29 @@
             digerGiderAdiWrapper.style.display = giderKategoriInput.value === 'Diğer' ? 'block' : 'none';
         });
         exportBtn.addEventListener('click', verileriDisaAktar);
+
+        // --- KİMLİK DOĞRULAMA FONKSİYONLARI ---
+        function girisYap() {
+            const kullaniciAdi = usernameInput.value;
+            const sifre = passwordInput.value;
+
+            if (kullaniciAdi === DOGRU_KULLANICI_ADI && sifre === DOGRU_SIFRE) {
+                loginScreen.classList.add('hidden');
+                appContainer.classList.remove('hidden');
+                document.addEventListener('DOMContentLoaded', baslat());
+            } else {
+                loginKart.classList.add('error');
+                setTimeout(() => {
+                    loginKart.classList.remove('error');
+                }, 500);
+            }
+        }
+
+        function cikisYap() {
+            appContainer.classList.add('hidden');
+            loginScreen.classList.remove('hidden');
+            passwordInput.value = ''; // Şifreyi temizle
+        }
         
         // --- BAŞLANGIÇ FONKSİYONU ---
         function baslat() {
