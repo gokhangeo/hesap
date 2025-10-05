@@ -73,7 +73,7 @@
 
         .ozet-alani { display: flex; justify-content: space-around; text-align: center; }
         .ozet-alani h3 { font-size: 0.9em; color: #606770; margin-bottom: 5px; font-weight: 500; }
-        .ozet-alani p { font-size: 1.6em; font-weight: 700; }
+        .ozet-alani p { font-size: 1.4em; font-weight: 700; } /* Rakam boyutu küçültüldü */
         .kalan-pozitif { color: var(--success-color); }
         .kalan-negatif { color: var(--danger-color); }
 
@@ -148,7 +148,7 @@
     </div>
 
     <div id="anaUygulama" class="container">
-        <!-- ... Ana uygulama içeriği ... -->
+        <!-- Ana uygulama içeriği dinamik olarak yüklenecek -->
     </div>
     
     <div id="durumMesaji" class="durum-mesaji"></div>
@@ -157,7 +157,6 @@
     <div id="duzenleModal" class="modal-arka-plan">
         <div class="modal-icerik">
             <h2>Gideri Düzenle</h2>
-            <input type="hidden" id="duzenleGiderId">
             <div class="form-grup">
                 <label for="duzenleGiderKategori">Kategori</label>
                 <select id="duzenleGiderKategori">
@@ -199,9 +198,8 @@
         // --- DOM ELEMENTLERİ ---
         const loginEkrani = document.getElementById('loginEkrani');
         const anaUygulama = document.getElementById('anaUygulama');
-        //... diğer DOM elementleri init fonksiyonu içinde atanacak.
         
-        // --- OLAY DİNLEYİCİLERİ ---
+        // --- OLAY DİNLEYİCİSİ ---
         document.addEventListener('DOMContentLoaded', init);
 
         function init() {
@@ -237,28 +235,22 @@
                     <button id="exportBtn">Bu Ayı İndir (CSV)</button>
                 </div>`;
             
-            // DOM elementlerini ata
-            const elements = {
-                loginBtn: document.getElementById('loginBtn'), logoutBtn: document.getElementById('logoutBtn'), aySecici: document.getElementById('aySecici'),
-                maasInput: document.getElementById('maasInput'), giderEkleBtn: document.getElementById('giderEkleBtn'), giderKategoriInput: document.getElementById('giderKategoriInput'),
-                digerGiderAdiKutusu: document.getElementById('digerGiderAdiKutusu'), giderListesi: document.getElementById('giderListesi'),
-                exportBtn: document.getElementById('exportBtn'),
-                duzenleModal: document.getElementById('duzenleModal'), modalKapatBtn: document.getElementById('modalKapatBtn'),
-                duzenlemeyiKaydetBtn: document.getElementById('duzenlemeyiKaydetBtn'), duzenleGiderKategori: document.getElementById('duzenleGiderKategori')
-            };
-
             // Olay dinleyicilerini ata
-            elements.loginBtn.addEventListener('click', girisYap);
-            elements.logoutBtn.addEventListener('click', cikisYap);
-            elements.aySecici.addEventListener('change', ayDegistir);
-            elements.maasInput.addEventListener('change', maasiKaydet);
-            elements.giderEkleBtn.addEventListener('click', giderEkle);
-            elements.giderKategoriInput.addEventListener('change', () => elements.digerGiderAdiKutusu.style.display = elements.giderKategoriInput.value === 'Diğer' ? 'block' : 'none');
-            elements.giderListesi.addEventListener('click', listeEylemi);
-            elements.exportBtn.addEventListener('click', verileriDisaAktar);
-            elements.modalKapatBtn.addEventListener('click', duzenlemeModaliniKapat);
-            elements.duzenlemeyiKaydetBtn.addEventListener('click', duzenlemeyiKaydet);
-            elements.duzenleGiderKategori.addEventListener('change', () => document.getElementById('duzenleDigerGiderKutusu').style.display = elements.duzenleGiderKategori.value === 'Diğer' ? 'block' : 'none');
+            document.getElementById('loginBtn').addEventListener('click', girisYap);
+            document.getElementById('logoutBtn').addEventListener('click', cikisYap);
+            document.getElementById('aySecici').addEventListener('change', ayDegistir);
+            document.getElementById('maasInput').addEventListener('change', maasiKaydet);
+            document.getElementById('giderEkleBtn').addEventListener('click', giderEkle);
+            document.getElementById('giderKategoriInput').addEventListener('change', () => {
+                document.getElementById('digerGiderAdiKutusu').style.display = document.getElementById('giderKategoriInput').value === 'Diğer' ? 'block' : 'none';
+            });
+            document.getElementById('giderListesi').addEventListener('click', listeEylemi);
+            document.getElementById('exportBtn').addEventListener('click', verileriDisaAktar);
+            document.getElementById('modalKapatBtn').addEventListener('click', duzenlemeModaliniKapat);
+            document.getElementById('duzenlemeyiKaydetBtn').addEventListener('click', duzenlemeyiKaydet);
+            document.getElementById('duzenleGiderKategori').addEventListener('change', () => {
+                document.getElementById('duzenleDigerGiderKutusu').style.display = document.getElementById('duzenleGiderKategori').value === 'Diğer' ? 'block' : 'none';
+            });
             
             aySeciciDoldur();
             seciliAy = document.getElementById('aySecici').value;
@@ -494,7 +486,23 @@
 
         // --- YARDIMCI FONKSİYONLAR ---
         function verileriDisaAktar() {
-            /* ... öncekiyle aynı ... */
+            const aylikVeri = tumVeriler[seciliAy];
+            if (!aylikVeri) return;
+            let csvIcerik = "data:text/csv;charset=utf-8,";
+            csvIcerik += "Tip,Açıklama,Tutar\n";
+            csvIcerik += `Maaş,Aylık Net Maaş,${aylikVeri.maas}\n`;
+            aylikVeri.giderler.forEach(g => {
+                csvIcerik += `Gider,${g.ad.replace(/,/g, '')},-${g.miktar}\n`;
+            });
+            const toplamGider = aylikVeri.giderler.reduce((t, g) => t + g.miktar, 0);
+            csvIcerik += `\nBakiye,Toplam Kalan,${aylikVeri.maas - toplamGider}\n`;
+
+            const link = document.createElement("a");
+            link.setAttribute("href", encodeURI(csvIcerik));
+            link.setAttribute("download", `${seciliAy}_bütçe.csv`);
+            document.body.appendChild(link);
+            link.click();
+            document.body.removeChild(link);
         }
         function durumGoster(mesaj, tip, sure = 5000) {
             const durumMesaji = document.getElementById('durumMesaji');
@@ -508,5 +516,4 @@
     </script>
 </body>
 </html>
-
 
