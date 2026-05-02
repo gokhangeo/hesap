@@ -10,7 +10,7 @@
             --bg-card: #ffffff;
             --text-primary: #1c1e21;
             --text-secondary: #65676b;
-            --accent-color: #007aff; /* iOS Mavisi */
+            --accent-color: #007aff; 
             --danger-color: #ff3b30;
             --success-color: #34c759;
             --warning-color: #ffcc00;
@@ -60,7 +60,7 @@
         /* --- FORM ELEMANLARI --- */
         .form-grup { margin-bottom: 16px; position: relative; }
         
-        input, select {
+        input[type="text"], input[type="number"], input[type="password"], select {
             width: 100%;
             padding: 16px;
             border: 2px solid transparent;
@@ -78,6 +78,31 @@
             border-color: var(--accent-color);
             outline: none;
             box-shadow: 0 0 0 4px rgba(0, 122, 255, 0.1);
+        }
+
+        .checkbox-container {
+            display: flex;
+            align-items: center;
+            gap: 10px;
+            background: #f5f7fa;
+            padding: 12px 16px;
+            border-radius: 12px;
+            cursor: pointer;
+        }
+
+        .checkbox-container input[type="checkbox"] {
+            width: 20px;
+            height: 20px;
+            accent-color: var(--accent-color);
+            margin: 0;
+            cursor: pointer;
+        }
+
+        .checkbox-container label {
+            margin: 0;
+            font-size: 14px;
+            color: var(--text-primary);
+            cursor: pointer;
         }
 
         /* --- BUTONLAR --- */
@@ -124,7 +149,7 @@
         .tutar-pozitif { color: var(--success-color) !important; }
         .tutar-negatif { color: var(--danger-color) !important; }
 
-        /* --- PROGRESS BAR (YENİ) --- */
+        /* --- PROGRESS BAR --- */
         .butce-durumu { margin-top: 15px; }
         .progress-bg { background: #f0f0f0; height: 8px; border-radius: 4px; overflow: hidden; }
         .progress-fill { height: 100%; width: 0%; transition: width 0.5s ease, background-color 0.3s; border-radius: 4px; }
@@ -140,7 +165,11 @@
         .gider-item:last-child { border-bottom: none; }
         
         .gider-bilgi { display: flex; flex-direction: column; }
-        .gider-ad { font-weight: 600; font-size: 16px; color: var(--text-primary); }
+        .gider-ad { font-weight: 600; font-size: 16px; color: var(--text-primary); display: flex; align-items: center; }
+        .sabit-rozet {
+            font-size: 10px; background: #e5f1ff; color: var(--accent-color);
+            padding: 2px 6px; border-radius: 8px; margin-left: 8px; font-weight: 700; text-transform: uppercase;
+        }
         .gider-tutar { font-size: 14px; color: var(--text-secondary); margin-top: 2px; }
 
         .gider-butonlar { display: flex; gap: 8px; }
@@ -281,6 +310,10 @@
             <div class="form-grup hidden" id="digerGiderAdiKutusu">
                 <input type="text" id="digerGiderAdiInput" placeholder="Gider açıklaması...">
             </div>
+            <div class="form-grup checkbox-container">
+                <input type="checkbox" id="giderSabitMi">
+                <label for="giderSabitMi">Bu bir sabit giderdir (Her ay tekrarlar)</label>
+            </div>
             <button id="giderEkleBtn" class="btn btn-primary">
                 <span>+</span> Ekle ve Kaydet
             </button>
@@ -288,9 +321,12 @@
 
         <!-- LİSTE -->
         <div class="kart">
-            <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 15px;">
+            <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 15px; flex-wrap: wrap; gap: 10px;">
                 <h2 style="margin:0;">Harcamalar</h2>
-                <button id="exportBtn" style="border:none; background:none; color:var(--accent-color); font-weight:600; cursor:pointer;">Excel İndir</button>
+                <div style="display: flex; gap: 15px;">
+                    <button id="copyPrevBtn" style="border:none; background:none; color:var(--success-color); font-weight:600; cursor:pointer;" class="hidden" title="Önceki aydaki sabit giderleri bu aya ekler">🔄 Sabitleri Getir</button>
+                    <button id="exportBtn" style="border:none; background:none; color:var(--accent-color); font-weight:600; cursor:pointer;">Excel İndir</button>
+                </div>
             </div>
             <ul id="giderListesi" class="gider-listesi">
                 <!-- JS ile doldurulacak -->
@@ -319,6 +355,10 @@
             </div>
             <div class="form-grup">
                 <input type="number" id="duzenleGiderMiktari" placeholder="Tutar">
+            </div>
+            <div class="form-grup checkbox-container">
+                <input type="checkbox" id="duzenleGiderSabitMi">
+                <label for="duzenleGiderSabitMi">Sabit gider</label>
             </div>
             <div class="modal-actions">
                 <button id="modalKapatBtn" class="btn btn-secondary">İptal</button>
@@ -366,6 +406,7 @@
             el('giderEkleBtn').addEventListener('click', addExpense);
             el('giderKategoriInput').addEventListener('change', toggleOtherInput);
             el('exportBtn').addEventListener('click', exportCSV);
+            el('copyPrevBtn').addEventListener('click', copyFromPreviousMonth);
             
             // Modal İşlemleri
             el('modalKapatBtn').addEventListener('click', () => el('duzenleModal').style.display = 'none');
@@ -398,7 +439,6 @@
         }
 
         // --- VERİ YÖNETİMİ (API) ---
-        // UTF-8 Karakter Sorunu Çözücü
         const utf8_to_b64 = (str) => window.btoa(unescape(encodeURIComponent(str)));
         const b64_to_utf8 = (str) => decodeURIComponent(escape(window.atob(str)));
 
@@ -427,7 +467,6 @@
         }
 
         async function saveData() {
-            // showToast('Kaydediliyor...'); // Çok sık çıkmasın diye kapattım
             try {
                 const content = utf8_to_b64(JSON.stringify(state.data, null, 2));
                 const body = {
@@ -457,20 +496,16 @@
 
         // --- UI GÜNCELLEME ---
         function updateUI() {
-            // Veri Kontrolü
             if (!state.data[state.currentMonth]) {
                 state.data[state.currentMonth] = { maas: 0, giderler: [] };
             }
             const currentData = state.data[state.currentMonth];
 
-            // Inputları Doldur
             el('maasInput').value = currentData.maas || '';
 
-            // Hesaplamalar
             const totalExpense = currentData.giderler.reduce((acc, item) => acc + item.miktar, 0);
             const remaining = currentData.maas - totalExpense;
 
-            // Özet Kartlarını Yaz
             el('gosterMaas').textContent = formatMoney(currentData.maas);
             el('gosterGider').textContent = formatMoney(totalExpense);
             
@@ -478,11 +513,9 @@
             kalanEl.textContent = formatMoney(remaining);
             kalanEl.className = remaining >= 0 ? 'tutar-pozitif' : 'tutar-negatif';
 
-            // Progress Bar Mantığı
             updateProgressBar(currentData.maas, totalExpense);
-
-            // Listeyi Çiz
             renderList(currentData.giderler);
+            checkPreviousMonthData();
         }
 
         function updateProgressBar(income, expense) {
@@ -517,22 +550,20 @@
                 return;
             }
 
-            // Son eklenen en üstte
             items.slice().reverse().forEach(item => {
+                const isSabitText = item.isSabit ? '<span class="sabit-rozet">📌 Sabit</span>' : '';
                 const li = document.createElement('li');
                 li.className = 'gider-item';
                 li.innerHTML = `
                     <div class="gider-bilgi">
-                        <span class="gider-ad">${item.ad}</span>
+                        <span class="gider-ad">${item.ad} ${isSabitText}</span>
                         <span class="gider-tutar">-${formatMoney(item.miktar)}</span>
                     </div>
                     <div class="gider-butonlar">
                         <button class="icon-btn edit" onclick="openEditModal(${item.id})">
-                            <!-- Kalem İkonu (SVG) -->
                             <svg viewBox="0 0 24 24"><path d="M3 17.25V21h3.75L17.81 9.94l-3.75-3.75L3 17.25zM20.71 7.04c.39-.39.39-1.02 0-1.41l-2.34-2.34c-.39-.39-1.02-.39-1.41 0l-1.83 1.83 3.75 3.75 1.83-1.83z"/></svg>
                         </button>
                         <button class="icon-btn delete" onclick="deleteExpense(${item.id})">
-                            <!-- Çöp Kutusu İkonu (SVG) -->
                             <svg viewBox="0 0 24 24"><path d="M6 19c0 1.1.9 2 2 2h8c1.1 0 2-.9 2-2V7H6v12zM19 4h-3.5l-1-1h-5l-1 1H5v2h14V4z"/></svg>
                         </button>
                     </div>
@@ -555,19 +586,20 @@
                 name = el('digerGiderAdiInput').value.trim() || 'Diğer';
             }
             const amount = parseFloat(el('giderMiktariInput').value);
+            const isSabit = el('giderSabitMi').checked;
 
             if (!amount || amount <= 0) {
                 showToast('Geçerli bir tutar girin!', true);
                 return;
             }
 
-            const newExpense = { id: Date.now(), ad: name, miktar: amount };
+            const newExpense = { id: Date.now(), ad: name, miktar: amount, isSabit: isSabit };
             state.data[state.currentMonth].giderler.push(newExpense);
 
-            // Formu Temizle
             el('giderMiktariInput').value = '';
             el('digerGiderAdiInput').value = '';
             el('giderKategoriInput').value = 'Kira';
+            el('giderSabitMi').checked = false;
             el('digerGiderAdiKutusu').classList.add('hidden');
 
             updateUI();
@@ -575,10 +607,55 @@
         }
 
         window.deleteExpense = function(id) {
-            if(confirm('Bu kaydı silmek istediğine emin misin?')) {
+            if(confirm('Bu harcamayı silmek istediğinize emin misiniz?')) {
                  state.data[state.currentMonth].giderler = state.data[state.currentMonth].giderler.filter(i => i.id !== id);
                  updateUI();
                  saveData();
+            }
+        }
+
+        // --- ÖNCEKİ AYDAN KOPYALAMA ---
+        function getPreviousMonthStr(currentStr) {
+            const [year, month] = currentStr.split('-');
+            const d = new Date(year, parseInt(month) - 2, 1);
+            return `${d.getFullYear()}-${String(d.getMonth() + 1).padStart(2, '0')}`;
+        }
+
+        function checkPreviousMonthData() {
+            const prevStr = getPreviousMonthStr(state.currentMonth);
+            const copyBtn = el('copyPrevBtn');
+            
+            // Eğer önceki ayda "Sabit Gider" olarak işaretlenmiş bir kayıt varsa tuşu göster
+            if (state.data[prevStr] && state.data[prevStr].giderler) {
+                const hasSabit = state.data[prevStr].giderler.some(i => i.isSabit);
+                if(hasSabit) {
+                    copyBtn.classList.remove('hidden');
+                    return;
+                }
+            }
+            copyBtn.classList.add('hidden');
+        }
+
+        function copyFromPreviousMonth() {
+            const prevStr = getPreviousMonthStr(state.currentMonth);
+            const prevData = state.data[prevStr];
+
+            if (!prevData || !prevData.giderler) return;
+
+            // Sadece sabit giderleri kopyala
+            const sabitGiderler = prevData.giderler.filter(i => i.isSabit);
+
+            if (sabitGiderler.length === 0) return;
+
+            if (confirm(`Geçen aydaki ${sabitGiderler.length} adet sabit gider bu aya kopyalanacak. Onaylıyor musunuz?`)) {
+                const newExpenses = sabitGiderler.map((item, index) => ({
+                    ...item,
+                    id: Date.now() + index // Çakışmaları engellemek için yeni ID
+                }));
+
+                state.data[state.currentMonth].giderler.push(...newExpenses);
+                updateUI();
+                saveData();
             }
         }
 
@@ -591,7 +668,6 @@
             const select = el('duzenleGiderKategori');
             const otherInput = el('duzenleDigerGiderAdi');
             
-            // Kategori Kontrolü
             const options = Array.from(select.options).map(o => o.value);
             if (options.includes(item.ad)) {
                 select.value = item.ad;
@@ -603,7 +679,8 @@
             }
 
             el('duzenleGiderMiktari').value = item.miktar;
-            el('duzenleModal').style.display = 'flex'; // Flex ile ortala
+            el('duzenleGiderSabitMi').checked = !!item.isSabit;
+            el('duzenleModal').style.display = 'flex';
         }
 
         function saveEdit() {
@@ -615,6 +692,7 @@
                 name = el('duzenleDigerGiderAdi').value.trim() || 'Diğer';
             }
             const amount = parseFloat(el('duzenleGiderMiktari').value);
+            const isSabit = el('duzenleGiderSabitMi').checked;
 
             if (!amount || amount <= 0) {
                 showToast('Tutar geçersiz', true);
@@ -624,7 +702,8 @@
             state.data[state.currentMonth].giderler[index] = { 
                 ...state.data[state.currentMonth].giderler[index], 
                 ad: name, 
-                miktar: amount 
+                miktar: amount,
+                isSabit: isSabit
             };
 
             el('duzenleModal').style.display = 'none';
@@ -636,7 +715,6 @@
         function initMonthSelector() {
             const selector = el('aySecici');
             const now = new Date();
-            // Son 1 yıl + gelecek 1 ay
             for (let i = 1; i >= -11; i--) {
                 const d = new Date(now.getFullYear(), now.getMonth() + i, 1);
                 const value = `${d.getFullYear()}-${String(d.getMonth() + 1).padStart(2, '0')}`;
