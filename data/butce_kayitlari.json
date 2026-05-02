@@ -318,6 +318,60 @@
         "ad": "K.Kartı",
         "miktar": 20000,
         "isSabit": false
+      },
+      {
+        "id": 1777738697528,
+        "ad": "Kredi",
+        "miktar": 3300,
+        "isSabit": true
+      },
+      {
+        "id": 1777738697529,
+        "ad": "Kredi",
+        "miktar": 6600,
+        "isSabit": true
+      },
+      {
+        "id": 1777738697530,
+        "ad": "Kredi",
+        "miktar": 1200,
+        "isSabit": true
+      },
+      {
+        "id": 1777738697531,
+        "ad": "Kredi",
+        "miktar": 6500,
+        "isSabit": true
+      },
+      {
+        "id": 1777738697532,
+        "ad": "Aidat",
+        "miktar": 2500,
+        "isSabit": true
+      },
+      {
+        "id": 1777738697533,
+        "ad": "Servis",
+        "miktar": 2000,
+        "isSabit": true
+      },
+      {
+        "id": 1777738697534,
+        "ad": "Kira",
+        "miktar": 35000,
+        "isSabit": true
+      },
+      {
+        "id": 1777738697535,
+        "ad": "Kredi",
+        "miktar": 1750,
+        "isSabit": true
+      },
+      {
+        "id": 1777738697536,
+        "ad": "Kredi",
+        "miktar": 6900,
+        "isSabit": true
       }
     ]
   }
