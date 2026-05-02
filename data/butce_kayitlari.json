@@ -266,12 +266,6 @@
     "maas": 100000,
     "giderler": [
       {
-        "id": 1777725312144,
-        "ad": "Kredi",
-        "miktar": 1750,
-        "isSabit": true
-      },
-      {
         "id": 1777725335636,
         "ad": "K.Kartı",
         "miktar": 20000,
