@@ -251,7 +251,8 @@
       {
         "id": 1774536890778,
         "ad": "Kredi",
-        "miktar": 1750
+        "miktar": 1750,
+        "isSabit": true
       }
     ]
   },
