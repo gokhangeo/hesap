@@ -266,12 +266,6 @@
     "maas": 100000,
     "giderler": [
       {
-        "id": 1777725312138,
-        "ad": "Kredi",
-        "miktar": 6600,
-        "isSabit": true
-      },
-      {
         "id": 1777725312139,
         "ad": "Kredi",
         "miktar": 1200,
