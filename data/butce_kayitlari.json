@@ -258,6 +258,55 @@
   },
   "2026-05": {
     "maas": 0,
-    "giderler": []
+    "giderler": [
+      {
+        "id": 1777725312137,
+        "ad": "Kredi",
+        "miktar": 3300,
+        "isSabit": true
+      },
+      {
+        "id": 1777725312138,
+        "ad": "Kredi",
+        "miktar": 6600,
+        "isSabit": true
+      },
+      {
+        "id": 1777725312139,
+        "ad": "Kredi",
+        "miktar": 1200,
+        "isSabit": true
+      },
+      {
+        "id": 1777725312140,
+        "ad": "Kredi",
+        "miktar": 6500,
+        "isSabit": true
+      },
+      {
+        "id": 1777725312141,
+        "ad": "Aidat",
+        "miktar": 2500,
+        "isSabit": true
+      },
+      {
+        "id": 1777725312142,
+        "ad": "Servis",
+        "miktar": 2000,
+        "isSabit": true
+      },
+      {
+        "id": 1777725312143,
+        "ad": "Kira",
+        "miktar": 35000,
+        "isSabit": true
+      },
+      {
+        "id": 1777725312144,
+        "ad": "Kredi",
+        "miktar": 1750,
+        "isSabit": true
+      }
+    ]
   }
 }
