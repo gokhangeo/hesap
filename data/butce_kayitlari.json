@@ -341,6 +341,12 @@
         "ad": "Kira",
         "miktar": 35000,
         "isSabit": true
+      },
+      {
+        "id": 1779387583354,
+        "ad": "Kredi",
+        "miktar": 3300,
+        "isSabit": true
       }
     ]
   }
