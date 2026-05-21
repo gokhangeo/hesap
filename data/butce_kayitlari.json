@@ -308,5 +308,46 @@
         "isSabit": true
       }
     ]
+  },
+  "2026-06": {
+    "maas": 0,
+    "giderler": [
+      {
+        "id": 1779387361146,
+        "ad": "Kredi",
+        "miktar": 6600,
+        "isSabit": true
+      },
+      {
+        "id": 1779387361147,
+        "ad": "Kredi",
+        "miktar": 1200,
+        "isSabit": true
+      },
+      {
+        "id": 1779387361148,
+        "ad": "Kredi",
+        "miktar": 6500,
+        "isSabit": true
+      },
+      {
+        "id": 1779387361149,
+        "ad": "Aidat",
+        "miktar": 2500,
+        "isSabit": true
+      },
+      {
+        "id": 1779387361150,
+        "ad": "Servis",
+        "miktar": 2000,
+        "isSabit": true
+      },
+      {
+        "id": 1779387361151,
+        "ad": "Kira",
+        "miktar": 35000,
+        "isSabit": true
+      }
+    ]
   }
 }
