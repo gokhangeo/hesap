@@ -347,6 +347,12 @@
         "ad": "Kredi",
         "miktar": 3300,
         "isSabit": true
+      },
+      {
+        "id": 1779387592603,
+        "ad": "Kredi",
+        "miktar": 6900,
+        "isSabit": true
       }
     ]
   }
