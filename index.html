@@ -1,3 +1,4 @@
+```html
 <!DOCTYPE html>
 <html lang="tr">
 <head>
@@ -32,191 +33,120 @@
             padding: 20px;
         }
 
-        .container { width: 100%; max-width: 480px; margin: 0 auto; }
+        .container { width: 100%; max-width: 480px; margin: 0 auto; padding-bottom: 50px; }
 
         /* --- GİRİŞ EKRANI --- */
-        #loginEkrani {
-            display: flex; flex-direction: column; justify-content: center; height: 80vh;
-        }
-        .login-logo {
-            font-size: 3em; text-align: center; margin-bottom: 20px; color: var(--accent-color);
-        }
+        #loginEkrani { display: flex; flex-direction: column; justify-content: center; height: 80vh; }
+        .login-logo { font-size: 3em; text-align: center; margin-bottom: 20px; color: var(--accent-color); }
         
         /* --- KART TASARIMI --- */
         .kart {
-            background: var(--bg-card);
-            border-radius: var(--border-radius);
-            padding: 24px;
-            margin-bottom: 20px;
-            box-shadow: var(--shadow);
-            border: 1px solid rgba(255,255,255,0.5);
+            background: var(--bg-card); border-radius: var(--border-radius); padding: 24px;
+            margin-bottom: 20px; box-shadow: var(--shadow); border: 1px solid rgba(255,255,255,0.5);
             transition: var(--transition);
         }
 
         h1, h2, h3 { font-weight: 700; margin-bottom: 15px; letter-spacing: -0.5px; }
         h1 { font-size: 1.8em; text-align: center; color: var(--text-primary); }
-        h2 { font-size: 1.2em; margin-bottom: 15px; color: var(--text-primary); }
+        h2 { font-size: 1.2em; margin-bottom: 15px; color: var(--text-primary); display: flex; justify-content: space-between; align-items: center; }
 
         /* --- FORM ELEMANLARI --- */
         .form-grup { margin-bottom: 16px; position: relative; }
         
-        input[type="text"], input[type="number"], input[type="password"], select {
-            width: 100%;
-            padding: 16px;
-            border: 2px solid transparent;
-            background-color: #f5f7fa;
-            border-radius: 12px;
-            font-size: 16px;
-            font-weight: 500;
-            color: var(--text-primary);
-            transition: var(--transition);
-            appearance: none;
+        input[type="text"], input[type="number"], input[type="password"], input[type="date"], select {
+            width: 100%; padding: 14px 16px; border: 2px solid transparent; background-color: #f5f7fa;
+            border-radius: 12px; font-size: 16px; font-weight: 500; color: var(--text-primary);
+            transition: var(--transition); appearance: none; font-family: inherit;
         }
         
-        input:focus, select:focus {
-            background-color: #fff;
-            border-color: var(--accent-color);
-            outline: none;
-            box-shadow: 0 0 0 4px rgba(0, 122, 255, 0.1);
-        }
+        input:focus, select:focus { background-color: #fff; border-color: var(--accent-color); outline: none; box-shadow: 0 0 0 4px rgba(0, 122, 255, 0.1); }
 
-        .checkbox-container {
-            display: flex;
-            align-items: center;
-            gap: 10px;
-            background: #f5f7fa;
-            padding: 12px 16px;
-            border-radius: 12px;
-            cursor: pointer;
-        }
-
-        .checkbox-container input[type="checkbox"] {
-            width: 20px;
-            height: 20px;
-            accent-color: var(--accent-color);
-            margin: 0;
-            cursor: pointer;
-        }
-
-        .checkbox-container label {
-            margin: 0;
-            font-size: 14px;
-            color: var(--text-primary);
-            cursor: pointer;
-        }
+        .checkbox-container { display: flex; align-items: center; gap: 10px; background: #f5f7fa; padding: 12px 16px; border-radius: 12px; cursor: pointer; }
+        .checkbox-container input[type="checkbox"] { width: 20px; height: 20px; accent-color: var(--accent-color); margin: 0; cursor: pointer; }
+        .checkbox-container label { margin: 0; font-size: 14px; color: var(--text-primary); cursor: pointer; }
 
         /* --- BUTONLAR --- */
         .btn {
-            width: 100%;
-            padding: 16px;
-            border: none;
-            border-radius: 12px;
-            font-size: 16px;
-            font-weight: 700;
-            cursor: pointer;
-            transition: var(--transition);
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            gap: 10px;
+            width: 100%; padding: 16px; border: none; border-radius: 12px; font-size: 16px;
+            font-weight: 700; cursor: pointer; transition: var(--transition);
+            display: flex; align-items: center; justify-content: center; gap: 10px;
         }
-        
-        .btn-primary {
-            background: var(--accent-color);
-            color: white;
-            box-shadow: 0 4px 12px rgba(0, 122, 255, 0.3);
-        }
-        
+        .btn-primary { background: var(--accent-color); color: white; box-shadow: 0 4px 12px rgba(0, 122, 255, 0.3); }
         .btn-primary:active { transform: scale(0.98); }
+        .btn-small { padding: 8px 12px; font-size: 13px; width: auto; border-radius: 8px; }
 
         /* --- BAŞLIK VE KONTROLLER --- */
-        .header-top {
-            display: flex; justify-content: space-between; align-items: center; margin-bottom: 20px;
-        }
-        #aySecici {
-            padding: 8px 16px; border-radius: 20px; background: white; font-size: 14px; width: auto; border: 1px solid #e1e1e1;
-        }
-        .logout-btn {
-            background: #fff0f0; color: var(--danger-color); padding: 8px 12px; border-radius: 12px; font-size: 13px; font-weight: 600; border: none; cursor: pointer;
-        }
+        .header-top { display: flex; justify-content: space-between; align-items: center; margin-bottom: 20px; }
+        #aySecici { padding: 8px 16px; border-radius: 20px; background: white; font-size: 14px; width: auto; border: 1px solid #e1e1e1; font-weight: 600;}
+        .logout-btn { background: #fff0f0; color: var(--danger-color); padding: 8px 12px; border-radius: 12px; font-size: 13px; font-weight: 600; border: none; cursor: pointer; }
 
         /* --- ÖZET KARTLARI --- */
-        .ozet-grid {
-            display: grid; grid-template-columns: 1fr 1fr 1fr; gap: 10px; text-align: center;
-        }
+        .ozet-grid { display: grid; grid-template-columns: 1fr 1fr 1fr; gap: 10px; text-align: center; }
         .ozet-item h3 { font-size: 12px; color: var(--text-secondary); text-transform: uppercase; margin-bottom: 5px; font-weight: 600; }
         .ozet-item p { font-size: 16px; font-weight: 800; color: var(--text-primary); }
         .tutar-pozitif { color: var(--success-color) !important; }
         .tutar-negatif { color: var(--danger-color) !important; }
 
-        /* --- PROGRESS BAR --- */
-        .butce-durumu { margin-top: 15px; }
-        .progress-bg { background: #f0f0f0; height: 8px; border-radius: 4px; overflow: hidden; }
-        .progress-fill { height: 100%; width: 0%; transition: width 0.5s ease, background-color 0.3s; border-radius: 4px; }
-        .durum-yazisi { font-size: 12px; color: var(--text-secondary); margin-top: 5px; text-align: right; }
+        /* --- TAKVİM (YENİ) --- */
+        .takvim-grid { display: grid; grid-template-columns: repeat(7, 1fr); gap: 4px; margin-top: 10px; }
+        .takvim-header { text-align: center; font-size: 11px; font-weight: 700; color: var(--text-secondary); padding-bottom: 5px; }
+        .takvim-gun {
+            background: #f8f9fa; border-radius: 8px; aspect-ratio: 1; display: flex; flex-direction: column;
+            align-items: center; justify-content: center; font-size: 14px; font-weight: 600; cursor: default;
+            transition: var(--transition); position: relative; border: 1px solid transparent;
+        }
+        .takvim-gun.bos { background: transparent; }
+        .takvim-gun.bugun { border-color: var(--accent-color); color: var(--accent-color); }
+        .takvim-gun.dolu { background: #e5f1ff; color: var(--accent-color); cursor: pointer; }
+        .takvim-gun.dolu:hover { background: var(--accent-color); color: white; transform: scale(1.05); }
+        .takvim-gun.dolu:hover .gun-tutar { color: rgba(255,255,255,0.9); }
+        .takvim-gun.secili { background: var(--accent-color); color: white; box-shadow: 0 4px 8px rgba(0,122,255,0.4); }
+        .takvim-gun.secili .gun-tutar { color: rgba(255,255,255,0.9); }
+        .gun-tutar { font-size: 9px; font-weight: 700; color: var(--text-secondary); margin-top: 2px; }
 
-        /* --- GİDER LİSTESİ VE İKONLAR --- */
+        /* --- GİDER LİSTESİ --- */
         .gider-listesi { list-style: none; }
         .gider-item {
             display: flex; justify-content: space-between; align-items: center;
-            padding: 16px 0; border-bottom: 1px solid #f0f0f0;
-            animation: slideIn 0.3s ease-out forwards;
+            padding: 16px 0; border-bottom: 1px solid #f0f0f0; animation: slideIn 0.3s ease-out forwards;
         }
         .gider-item:last-child { border-bottom: none; }
-        
-        .gider-bilgi { display: flex; flex-direction: column; }
-        .gider-ad { font-weight: 600; font-size: 16px; color: var(--text-primary); display: flex; align-items: center; }
-        .sabit-rozet {
-            font-size: 10px; background: #e5f1ff; color: var(--accent-color);
-            padding: 2px 6px; border-radius: 8px; margin-left: 8px; font-weight: 700; text-transform: uppercase;
-        }
-        .gider-tutar { font-size: 14px; color: var(--text-secondary); margin-top: 2px; }
+        .gider-bilgi { display: flex; flex-direction: column; gap: 2px; }
+        .gider-ad { font-weight: 600; font-size: 16px; color: var(--text-primary); display: flex; align-items: center; flex-wrap: wrap; gap: 6px;}
+        .sabit-rozet { font-size: 10px; background: #e5f1ff; color: var(--accent-color); padding: 2px 6px; border-radius: 8px; font-weight: 700; text-transform: uppercase; }
+        .tarih-rozet { font-size: 11px; color: var(--text-secondary); display: flex; align-items: center; gap: 3px; }
+        .gider-tutar { font-size: 15px; font-weight: 700; color: var(--danger-color); }
 
         .gider-butonlar { display: flex; gap: 8px; }
-        
         .icon-btn {
-            width: 36px; height: 36px; border-radius: 50%; border: none;
-            display: flex; align-items: center; justify-content: center;
-            cursor: pointer; transition: var(--transition);
-            background: #f5f7fa; color: var(--text-secondary);
+            width: 36px; height: 36px; border-radius: 50%; border: none; display: flex; align-items: center; justify-content: center;
+            cursor: pointer; transition: var(--transition); background: #f5f7fa; color: var(--text-secondary);
         }
-        
         .icon-btn.edit:hover { background: #fff8e1; color: var(--warning-color); }
         .icon-btn.delete:hover { background: #fff0f0; color: var(--danger-color); }
-        
         .icon-btn svg { width: 18px; height: 18px; fill: currentColor; }
 
-        @keyframes slideIn {
-            from { opacity: 0; transform: translateY(10px); }
-            to { opacity: 1; transform: translateY(0); }
-        }
+        @keyframes slideIn { from { opacity: 0; transform: translateY(10px); } to { opacity: 1; transform: translateY(0); } }
 
-        /* --- MODAL --- */
+        /* --- MODAL VE DİĞERLERİ --- */
         .modal {
-            display: none; position: fixed; z-index: 1000; left: 0; top: 0;
-            width: 100%; height: 100%; background-color: rgba(0,0,0,0.4);
-            backdrop-filter: blur(4px);
-            align-items: center; justify-content: center;
+            display: none; position: fixed; z-index: 1000; left: 0; top: 0; width: 100%; height: 100%;
+            background-color: rgba(0,0,0,0.4); backdrop-filter: blur(4px); align-items: center; justify-content: center; padding: 15px;
         }
         .modal-content {
-            background: white; padding: 30px; border-radius: 24px; width: 90%; max-width: 400px;
-            box-shadow: 0 20px 40px rgba(0,0,0,0.2); animation: popIn 0.3s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+            background: white; padding: 30px; border-radius: 24px; width: 100%; max-width: 400px;
+            box-shadow: 0 20px 40px rgba(0,0,0,0.2); animation: popIn 0.3s cubic-bezier(0.175, 0.885, 0.32, 1.275); max-height: 90vh; overflow-y: auto;
         }
         .modal-actions { display: flex; gap: 10px; margin-top: 20px; }
         .btn-secondary { background: #f0f2f5; color: var(--text-primary); }
-
         @keyframes popIn { from { transform: scale(0.8); opacity: 0; } to { transform: scale(1); opacity: 1; } }
 
-        /* --- BİLDİRİM --- */
         .toast {
             position: fixed; bottom: 30px; left: 50%; transform: translateX(-50%) translateY(100px);
             background: rgba(0,0,0,0.85); color: white; padding: 12px 24px; border-radius: 50px;
-            font-size: 14px; opacity: 0; transition: all 0.4s cubic-bezier(0.68, -0.55, 0.265, 1.55); z-index: 2000;
-            box-shadow: 0 10px 20px rgba(0,0,0,0.2);
+            font-size: 14px; opacity: 0; transition: all 0.4s cubic-bezier(0.68, -0.55, 0.265, 1.55); z-index: 2000; box-shadow: 0 10px 20px rgba(0,0,0,0.2);
         }
         .toast.show { transform: translateX(-50%) translateY(0); opacity: 1; }
-        
-        /* Gizli elementler */
         .hidden { display: none !important; }
         .gider-form-row { display: flex; gap: 10px; }
     </style>
@@ -228,24 +158,16 @@
         <div class="kart" style="text-align: center; padding: 40px 20px;">
             <div class="login-logo">📊</div>
             <h1>Bütçe Takip</h1>
-            <p style="color: var(--text-secondary); margin-bottom: 30px;">Devam etmek için lütfen giriş yapın.</p>
-            
-            <div class="form-grup">
-                <input type="text" id="usernameInput" placeholder="Kullanıcı Adı">
-            </div>
-            <div class="form-grup">
-                <input type="password" id="passwordInput" placeholder="Şifre">
-            </div>
-            <button id="loginBtn" class="btn btn-primary">
-                Giriş Yap
-            </button>
+            <p style="color: var(--text-secondary); margin-bottom: 30px;">Devam etmek için giriş yapın.</p>
+            <div class="form-grup"><input type="text" id="usernameInput" placeholder="Kullanıcı Adı"></div>
+            <div class="form-grup"><input type="password" id="passwordInput" placeholder="Şifre"></div>
+            <button id="loginBtn" class="btn btn-primary">Giriş Yap</button>
         </div>
     </div>
 
     <!-- ANA UYGULAMA -->
     <div id="anaUygulama" class="container hidden">
         
-        <!-- ÜST KONTROLLER -->
         <div class="header-top">
             <h2 style="margin:0; font-size: 1.4em;">Hoş Geldiniz</h2>
             <div style="display: flex; gap:10px;">
@@ -257,33 +179,23 @@
         <!-- ÖZET KARTI -->
         <div class="kart">
             <div class="ozet-grid">
-                <div class="ozet-item">
-                    <h3>Maaş</h3>
-                    <p id="gosterMaas">0 ₺</p>
-                </div>
-                <div class="ozet-item">
-                    <h3>Gider</h3>
-                    <p id="gosterGider">0 ₺</p>
-                </div>
-                <div class="ozet-item">
-                    <h3>Kalan</h3>
-                    <p id="gosterKalan">0 ₺</p>
-                </div>
-            </div>
-            
-            <!-- GÖRSEL BÜTÇE DURUMU -->
-            <div class="butce-durumu">
-                <div class="progress-bg">
-                    <div id="progressBar" class="progress-fill" style="background-color: var(--success-color);"></div>
-                </div>
-                <div id="progressText" class="durum-yazisi">%0 harcandı</div>
+                <div class="ozet-item"><h3>Maaş</h3><p id="gosterMaas">0 ₺</p></div>
+                <div class="ozet-item"><h3>Gider</h3><p id="gosterGider">0 ₺</p></div>
+                <div class="ozet-item"><h3>Kalan</h3><p id="gosterKalan">0 ₺</p></div>
             </div>
         </div>
 
-        <!-- MAAŞ GİRİŞİ -->
         <div class="kart">
             <div class="form-grup" style="margin-bottom: 0;">
                 <input type="number" id="maasInput" placeholder="Bu ayki net maaşınız (₺)">
+            </div>
+        </div>
+
+        <!-- TAKVİM KARTI -->
+        <div class="kart">
+            <h2>Ay Takvimi</h2>
+            <div id="takvimAlani" class="takvim-grid">
+                <!-- JS ile Doldurulacak -->
             </div>
         </div>
 
@@ -304,33 +216,35 @@
                     </select>
                 </div>
                 <div class="form-grup" style="flex: 1;">
-                    <input type="number" id="giderMiktariInput" placeholder="Tutar">
+                    <input type="number" id="giderMiktariInput" placeholder="Tutar (₺)">
                 </div>
             </div>
             <div class="form-grup hidden" id="digerGiderAdiKutusu">
                 <input type="text" id="digerGiderAdiInput" placeholder="Gider açıklaması...">
             </div>
+            <div class="form-grup">
+                <input type="date" id="giderTarihInput">
+            </div>
             <div class="form-grup checkbox-container">
                 <input type="checkbox" id="giderSabitMi">
                 <label for="giderSabitMi">Bu bir sabit giderdir (Her ay tekrarlar)</label>
             </div>
-            <button id="giderEkleBtn" class="btn btn-primary">
-                <span>+</span> Ekle ve Kaydet
-            </button>
+            <button id="giderEkleBtn" class="btn btn-primary"><span>+</span> Ekle ve Kaydet</button>
         </div>
 
         <!-- LİSTE -->
         <div class="kart">
             <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 15px; flex-wrap: wrap; gap: 10px;">
-                <h2 style="margin:0;">Harcamalar</h2>
-                <div style="display: flex; gap: 15px;">
-                    <button id="copyPrevBtn" style="border:none; background:none; color:var(--success-color); font-weight:600; cursor:pointer;" class="hidden" title="Önceki aydaki sabit giderleri bu aya ekler">🔄 Sabitleri Getir</button>
+                <h2 style="margin:0; display:flex; align-items:center; gap:10px;">
+                    Harcamalar 
+                    <button id="filtreTemizleBtn" class="btn-small btn-secondary hidden" style="font-size: 11px; padding: 4px 8px;">Tümünü Gör</button>
+                </h2>
+                <div style="display: flex; gap: 10px;">
+                    <button id="copyPrevBtn" style="border:none; background:none; color:var(--success-color); font-weight:600; cursor:pointer;" class="hidden">🔄 Sabitleri Getir</button>
                     <button id="exportBtn" style="border:none; background:none; color:var(--accent-color); font-weight:600; cursor:pointer;">Excel İndir</button>
                 </div>
             </div>
-            <ul id="giderListesi" class="gider-listesi">
-                <!-- JS ile doldurulacak -->
-            </ul>
+            <ul id="giderListesi" class="gider-listesi"></ul>
         </div>
     </div>
 
@@ -340,25 +254,16 @@
             <h2 style="text-align: center;">Gideri Düzenle</h2>
             <div class="form-grup">
                 <select id="duzenleGiderKategori">
-                     <option value="Kira">🏠 Kira</option>
-                        <option value="Aidat">🏢 Aidat</option>
-                        <option value="Kredi">🏦 Kredi</option>
-                        <option value="K.Kartı">💳 K.Kartı</option>
-                        <option value="Servis">🚌 Servis</option>
-                        <option value="Fatura">⚡ Fatura</option>
-                        <option value="Market">🛒 Market</option>
-                        <option value="Diğer">🔹 Diğer</option>
+                     <option value="Kira">🏠 Kira</option><option value="Aidat">🏢 Aidat</option><option value="Kredi">🏦 Kredi</option>
+                     <option value="K.Kartı">💳 K.Kartı</option><option value="Servis">🚌 Servis</option><option value="Fatura">⚡ Fatura</option>
+                     <option value="Market">🛒 Market</option><option value="Diğer">🔹 Diğer</option>
                 </select>
             </div>
-            <div class="form-grup hidden" id="duzenleDigerGiderKutusu">
-                <input type="text" id="duzenleDigerGiderAdi" placeholder="Gider adı">
-            </div>
-            <div class="form-grup">
-                <input type="number" id="duzenleGiderMiktari" placeholder="Tutar">
-            </div>
+            <div class="form-grup hidden" id="duzenleDigerGiderKutusu"><input type="text" id="duzenleDigerGiderAdi" placeholder="Gider adı"></div>
+            <div class="form-grup"><input type="number" id="duzenleGiderMiktari" placeholder="Tutar"></div>
+            <div class="form-grup"><input type="date" id="duzenleGiderTarih"></div>
             <div class="form-grup checkbox-container">
-                <input type="checkbox" id="duzenleGiderSabitMi">
-                <label for="duzenleGiderSabitMi">Sabit gider</label>
+                <input type="checkbox" id="duzenleGiderSabitMi"><label for="duzenleGiderSabitMi">Sabit gider</label>
             </div>
             <div class="modal-actions">
                 <button id="modalKapatBtn" class="btn btn-secondary">İptal</button>
@@ -367,7 +272,6 @@
         </div>
     </div>
 
-    <!-- BİLDİRİM KUTUSU -->
     <div id="toast" class="toast">İşlem başarılı</div>
 
     <script>
@@ -375,24 +279,14 @@
         const CREDENTIALS = { u: '4G', p: '503344' };
         const API_CONFIG = {
             token: 'ghp_2KS6iY7t1ka6bKyHwONJ' + 'kXdwOUVhrU3PqlSX',
-            owner: 'gokhangeo',
-            repo: 'hesap',
-            path: 'data/butce_kayitlari.json'
+            owner: 'gokhangeo', repo: 'hesap', path: 'data/butce_kayitlari.json'
         };
         const API_URL = `https://api.github.com/repos/${API_CONFIG.owner}/${API_CONFIG.repo}/contents/${API_CONFIG.path}`;
 
         // --- STATE ---
-        let state = {
-            data: {},
-            currentMonth: '',
-            sha: null,
-            editingId: null
-        };
-
-        // --- DOM ELEMENTLERİ ---
+        let state = { data: {}, currentMonth: '', sha: null, editingId: null, filterDate: null };
         const el = (id) => document.getElementById(id);
         
-        // --- BAŞLATMA ---
         document.addEventListener('DOMContentLoaded', () => {
             initMonthSelector();
             setupEventListeners();
@@ -400,285 +294,257 @@
 
         function setupEventListeners() {
             el('loginBtn').addEventListener('click', handleLogin);
-            el('logoutBtn').addEventListener('click', handleLogout);
+            el('logoutBtn').addEventListener('click', () => location.reload());
             el('aySecici').addEventListener('change', handleMonthChange);
             el('maasInput').addEventListener('change', saveSalary);
             el('giderEkleBtn').addEventListener('click', addExpense);
-            el('giderKategoriInput').addEventListener('change', toggleOtherInput);
+            el('giderKategoriInput').addEventListener('change', () => toggleOtherInput('giderKategoriInput', 'digerGiderAdiKutusu'));
             el('exportBtn').addEventListener('click', exportCSV);
             el('copyPrevBtn').addEventListener('click', copyFromPreviousMonth);
+            el('filtreTemizleBtn').addEventListener('click', clearFilter);
             
-            // Modal İşlemleri
             el('modalKapatBtn').addEventListener('click', () => el('duzenleModal').style.display = 'none');
             el('duzenlemeyiKaydetBtn').addEventListener('click', saveEdit);
-            el('duzenleGiderKategori').addEventListener('change', toggleEditOtherInput);
+            el('duzenleGiderKategori').addEventListener('change', () => toggleOtherInput('duzenleGiderKategori', 'duzenleDigerGiderKutusu'));
         }
 
-        // --- GÜVENLİK & GİRİŞ ---
         function handleLogin() {
-            const u = el('usernameInput').value;
-            const p = el('passwordInput').value;
-            const btn = el('loginBtn');
-
-            if (u === CREDENTIALS.u && p === CREDENTIALS.p) {
+            if (el('usernameInput').value === CREDENTIALS.u && el('passwordInput').value === CREDENTIALS.p) {
                 el('loginEkrani').classList.add('hidden');
                 el('anaUygulama').classList.remove('hidden');
                 fetchData();
             } else {
-                btn.innerHTML = "Hatalı Giriş!";
-                btn.style.backgroundColor = "var(--danger-color)";
-                setTimeout(() => {
-                    btn.innerHTML = "Giriş Yap";
-                    btn.style.backgroundColor = "var(--accent-color)";
-                }, 1500);
+                showToast('Hatalı Giriş!', true);
             }
         }
 
-        function handleLogout() {
-            location.reload();
-        }
-
-        // --- VERİ YÖNETİMİ (API) ---
         const utf8_to_b64 = (str) => window.btoa(unescape(encodeURIComponent(str)));
         const b64_to_utf8 = (str) => decodeURIComponent(escape(window.atob(str)));
 
         async function fetchData() {
             showToast('Veriler yükleniyor...');
             try {
-                const res = await fetch(API_URL, {
-                    headers: { 'Authorization': `token ${API_CONFIG.token}`, 'Accept': 'application/vnd.github.v3+json' }
-                });
-
-                if (res.status === 404) {
-                    state.data = {};
-                    state.sha = null;
-                } else if (res.ok) {
+                const res = await fetch(API_URL, { headers: { 'Authorization': `token ${API_CONFIG.token}`, 'Accept': 'application/vnd.github.v3+json' } });
+                if (res.status === 404) { state.data = {}; state.sha = null; } 
+                else if (res.ok) {
                     const json = await res.json();
-                    state.sha = json.sha;
-                    state.data = JSON.parse(b64_to_utf8(json.content));
-                } else {
-                    throw new Error('API Hatası');
-                }
+                    state.sha = json.sha; state.data = JSON.parse(b64_to_utf8(json.content));
+                } else throw new Error('API Hatası');
                 updateUI();
-            } catch (e) {
-                console.error(e);
-                showToast('Veri yüklenemedi!', true);
-            }
+            } catch (e) { showToast('Veri yüklenemedi!', true); }
         }
 
         async function saveData() {
             try {
-                const content = utf8_to_b64(JSON.stringify(state.data, null, 2));
-                const body = {
-                    message: `Update: ${state.currentMonth}`,
-                    content: content
-                };
+                const body = { message: `Update: ${state.currentMonth}`, content: utf8_to_b64(JSON.stringify(state.data, null, 2)) };
                 if (state.sha) body.sha = state.sha;
-
-                const res = await fetch(API_URL, {
-                    method: 'PUT',
-                    headers: { 'Authorization': `token ${API_CONFIG.token}`, 'Accept': 'application/vnd.github.v3+json' },
-                    body: JSON.stringify(body)
-                });
-
+                const res = await fetch(API_URL, { method: 'PUT', headers: { 'Authorization': `token ${API_CONFIG.token}`, 'Accept': 'application/vnd.github.v3+json' }, body: JSON.stringify(body) });
                 if (res.ok) {
                     const json = await res.json();
-                    state.sha = json.content.sha;
-                    showToast('Kayıt Başarılı');
-                } else {
-                    throw new Error('Kayıt başarısız');
-                }
-            } catch (e) {
-                console.error(e);
-                showToast('Kaydedilemedi!', true);
-            }
+                    state.sha = json.content.sha; showToast('Kayıt Başarılı');
+                } else throw new Error('Kayıt başarısız');
+            } catch (e) { showToast('Kaydedilemedi!', true); }
         }
 
-        // --- UI GÜNCELLEME ---
         function updateUI() {
-            if (!state.data[state.currentMonth]) {
-                state.data[state.currentMonth] = { maas: 0, giderler: [] };
-            }
+            if (!state.data[state.currentMonth]) state.data[state.currentMonth] = { maas: 0, giderler: [] };
             const currentData = state.data[state.currentMonth];
 
             el('maasInput').value = currentData.maas || '';
-
             const totalExpense = currentData.giderler.reduce((acc, item) => acc + item.miktar, 0);
             const remaining = currentData.maas - totalExpense;
 
             el('gosterMaas').textContent = formatMoney(currentData.maas);
             el('gosterGider').textContent = formatMoney(totalExpense);
-            
-            const kalanEl = el('gosterKalan');
-            kalanEl.textContent = formatMoney(remaining);
-            kalanEl.className = remaining >= 0 ? 'tutar-pozitif' : 'tutar-negatif';
+            el('gosterKalan').textContent = formatMoney(remaining);
+            el('gosterKalan').className = remaining >= 0 ? 'tutar-pozitif' : 'tutar-negatif';
 
-            updateProgressBar(currentData.maas, totalExpense);
-            renderList(currentData.giderler);
+            setDefaultDate();
+            renderTakvim();
+            renderList();
             checkPreviousMonthData();
         }
 
-        function updateProgressBar(income, expense) {
-            const bar = el('progressBar');
-            const text = el('progressText');
+        // --- TAKVİM FONKSİYONLARI ---
+        function renderTakvim() {
+            const takvimAlan = el('takvimAlani');
+            const [yil, ay] = state.currentMonth.split('-');
+            const ilkGun = new Date(yil, parseInt(ay) - 1, 1).getDay(); // 0: Pazar, 1: Pzt
+            const gunSayisi = new Date(yil, parseInt(ay), 0).getDate();
+            let baslangicBosluk = ilkGun === 0 ? 6 : ilkGun - 1; // Pzt ile başlatmak için
+
+            let html = '<div class="takvim-header">Pzt</div><div class="takvim-header">Sal</div><div class="takvim-header">Çar</div><div class="takvim-header">Per</div><div class="takvim-header">Cum</div><div class="takvim-header">Cmt</div><div class="takvim-header">Paz</div>';
             
-            if (!income || income === 0) {
-                bar.style.width = '0%';
-                text.textContent = 'Maaş girilmedi';
-                return;
+            for(let i=0; i<baslangicBosluk; i++) html += '<div class="takvim-gun bos"></div>';
+
+            const giderler = state.data[state.currentMonth]?.giderler || [];
+            const bugun = new Date();
+
+            for(let d=1; d<=gunSayisi; d++) {
+                const gunStr = `${yil}-${ay}-${String(d).padStart(2, '0')}`;
+                const gununGiderleri = giderler.filter(g => g.tarih === gunStr);
+                const toplam = gununGiderleri.reduce((sum, g) => sum + g.miktar, 0);
+                
+                let sinif = 'takvim-gun';
+                let icerik = `<span>${d}</span>`;
+
+                if(toplam > 0) {
+                    sinif += ' dolu';
+                    icerik += `<span class="gun-tutar">${formatMoneyKisa(toplam)}</span>`;
+                }
+                
+                if(bugun.getFullYear() == yil && bugun.getMonth() + 1 == ay && bugun.getDate() == d) sinif += ' bugun';
+                if(state.filterDate === gunStr) sinif += ' secili';
+
+                // Tıklama olayı sadece dolu günlere
+                const tiklama = toplam > 0 ? `onclick="gunFiltrele('${gunStr}')"` : '';
+                html += `<div class="${sinif}" ${tiklama}>${icerik}</div>`;
             }
+            takvimAlan.innerHTML = html;
+        }
 
-            const percent = Math.min((expense / income) * 100, 100);
-            bar.style.width = `${percent}%`;
-            text.textContent = `%${Math.round(percent)} harcandı`;
-
-            if (percent < 50) {
-                bar.style.backgroundColor = 'var(--success-color)';
-            } else if (percent < 85) {
-                bar.style.backgroundColor = 'var(--warning-color)';
+        window.gunFiltrele = function(tarihStr) {
+            if(state.filterDate === tarihStr) {
+                clearFilter(); // Zaten seçiliyse kaldır
             } else {
-                bar.style.backgroundColor = 'var(--danger-color)';
+                state.filterDate = tarihStr;
+                el('filtreTemizleBtn').classList.remove('hidden');
+                renderTakvim();
+                renderList();
             }
         }
 
-        function renderList(items) {
+        function clearFilter() {
+            state.filterDate = null;
+            el('filtreTemizleBtn').classList.add('hidden');
+            renderTakvim();
+            renderList();
+        }
+
+        function renderList() {
             const list = el('giderListesi');
             list.innerHTML = '';
+            let items = state.data[state.currentMonth]?.giderler || [];
+            
+            if(state.filterDate) {
+                items = items.filter(i => i.tarih === state.filterDate);
+            }
 
             if (items.length === 0) {
-                list.innerHTML = '<li style="text-align:center; color:#999; padding:20px;">Henüz harcama yok 🎉</li>';
+                list.innerHTML = '<li style="text-align:center; color:#999; padding:20px;">Kayıt bulunamadı</li>';
                 return;
             }
 
             items.slice().reverse().forEach(item => {
-                const isSabitText = item.isSabit ? '<span class="sabit-rozet">📌 Sabit</span>' : '';
-                const li = document.createElement('li');
-                li.className = 'gider-item';
-                li.innerHTML = `
-                    <div class="gider-bilgi">
-                        <span class="gider-ad">${item.ad} ${isSabitText}</span>
-                        <span class="gider-tutar">-${formatMoney(item.miktar)}</span>
-                    </div>
-                    <div class="gider-butonlar">
-                        <button class="icon-btn edit" onclick="openEditModal(${item.id})">
-                            <svg viewBox="0 0 24 24"><path d="M3 17.25V21h3.75L17.81 9.94l-3.75-3.75L3 17.25zM20.71 7.04c.39-.39.39-1.02 0-1.41l-2.34-2.34c-.39-.39-1.02-.39-1.41 0l-1.83 1.83 3.75 3.75 1.83-1.83z"/></svg>
-                        </button>
-                        <button class="icon-btn delete" onclick="deleteExpense(${item.id})">
-                            <svg viewBox="0 0 24 24"><path d="M6 19c0 1.1.9 2 2 2h8c1.1 0 2-.9 2-2V7H6v12zM19 4h-3.5l-1-1h-5l-1 1H5v2h14V4z"/></svg>
-                        </button>
-                    </div>
-                `;
-                list.appendChild(li);
+                const isSabit = item.isSabit ? '<span class="sabit-rozet">📌 Sabit</span>' : '';
+                const tarihGosterim = item.tarih ? `<div class="tarih-rozet">📅 ${item.tarih.split('-').reverse().join('.')}</div>` : '';
+                
+                list.innerHTML += `
+                    <li class="gider-item">
+                        <div class="gider-bilgi">
+                            <span class="gider-ad">${item.ad} ${isSabit}</span>
+                            ${tarihGosterim}
+                            <span class="gider-tutar">${formatMoney(item.miktar)}</span>
+                        </div>
+                        <div class="gider-butonlar">
+                            <button class="icon-btn edit" onclick="openEditModal(${item.id})">
+                                <svg viewBox="0 0 24 24"><path d="M3 17.25V21h3.75L17.81 9.94l-3.75-3.75L3 17.25zM20.71 7.04c.39-.39.39-1.02 0-1.41l-2.34-2.34c-.39-.39-1.02-.39-1.41 0l-1.83 1.83 3.75 3.75 1.83-1.83z"/></svg>
+                            </button>
+                            <button class="icon-btn delete" onclick="deleteExpense(${item.id})">
+                                <svg viewBox="0 0 24 24"><path d="M6 19c0 1.1.9 2 2 2h8c1.1 0 2-.9 2-2V7H6v12zM19 4h-3.5l-1-1h-5l-1 1H5v2h14V4z"/></svg>
+                            </button>
+                        </div>
+                    </li>`;
             });
         }
 
         // --- İŞLEMLER ---
         function saveSalary() {
-            const val = parseFloat(el('maasInput').value);
-            state.data[state.currentMonth].maas = val || 0;
-            updateUI();
-            saveData();
+            state.data[state.currentMonth].maas = parseFloat(el('maasInput').value) || 0;
+            updateUI(); saveData();
         }
 
         function addExpense() {
             let name = el('giderKategoriInput').value;
-            if (name === 'Diğer') {
-                name = el('digerGiderAdiInput').value.trim() || 'Diğer';
-            }
+            if (name === 'Diğer') name = el('digerGiderAdiInput').value.trim() || 'Diğer';
+            
             const amount = parseFloat(el('giderMiktariInput').value);
-            const isSabit = el('giderSabitMi').checked;
+            const tarih = el('giderTarihInput').value;
 
-            if (!amount || amount <= 0) {
-                showToast('Geçerli bir tutar girin!', true);
-                return;
+            if (!amount || amount <= 0 || !tarih) {
+                showToast('Lütfen tutar ve tarih girin!', true); return;
             }
 
-            const newExpense = { id: Date.now(), ad: name, miktar: amount, isSabit: isSabit };
-            state.data[state.currentMonth].giderler.push(newExpense);
+            state.data[state.currentMonth].giderler.push({ 
+                id: Date.now(), ad: name, miktar: amount, 
+                isSabit: el('giderSabitMi').checked, tarih: tarih 
+            });
 
-            el('giderMiktariInput').value = '';
-            el('digerGiderAdiInput').value = '';
-            el('giderKategoriInput').value = 'Kira';
-            el('giderSabitMi').checked = false;
+            el('giderMiktariInput').value = ''; el('digerGiderAdiInput').value = '';
+            el('giderKategoriInput').value = 'Kira'; el('giderSabitMi').checked = false;
             el('digerGiderAdiKutusu').classList.add('hidden');
 
-            updateUI();
-            saveData();
+            updateUI(); saveData();
         }
 
         window.deleteExpense = function(id) {
-            if(confirm('Bu harcamayı silmek istediğinize emin misiniz?')) {
+            if(confirm('Silmek istediğinize emin misiniz?')) {
                  state.data[state.currentMonth].giderler = state.data[state.currentMonth].giderler.filter(i => i.id !== id);
-                 updateUI();
-                 saveData();
+                 updateUI(); saveData();
             }
-        }
-
-        // --- ÖNCEKİ AYDAN KOPYALAMA ---
-        function getPreviousMonthStr(currentStr) {
-            const [year, month] = currentStr.split('-');
-            const d = new Date(year, parseInt(month) - 2, 1);
-            return `${d.getFullYear()}-${String(d.getMonth() + 1).padStart(2, '0')}`;
         }
 
         function checkPreviousMonthData() {
-            const prevStr = getPreviousMonthStr(state.currentMonth);
-            const copyBtn = el('copyPrevBtn');
+            const [y, m] = state.currentMonth.split('-');
+            const prev = new Date(y, parseInt(m) - 2, 1);
+            const prevStr = `${prev.getFullYear()}-${String(prev.getMonth() + 1).padStart(2, '0')}`;
             
-            // Eğer önceki ayda "Sabit Gider" olarak işaretlenmiş bir kayıt varsa tuşu göster
-            if (state.data[prevStr] && state.data[prevStr].giderler) {
-                const hasSabit = state.data[prevStr].giderler.some(i => i.isSabit);
-                if(hasSabit) {
-                    copyBtn.classList.remove('hidden');
-                    return;
-                }
-            }
-            copyBtn.classList.add('hidden');
+            const hasSabit = state.data[prevStr]?.giderler?.some(i => i.isSabit);
+            hasSabit ? el('copyPrevBtn').classList.remove('hidden') : el('copyPrevBtn').classList.add('hidden');
         }
 
         function copyFromPreviousMonth() {
-            const prevStr = getPreviousMonthStr(state.currentMonth);
-            const prevData = state.data[prevStr];
+            const [y, m] = state.currentMonth.split('-');
+            const prev = new Date(y, parseInt(m) - 2, 1);
+            const prevStr = `${prev.getFullYear()}-${String(prev.getMonth() + 1).padStart(2, '0')}`;
+            const sabitGiderler = state.data[prevStr]?.giderler?.filter(i => i.isSabit);
 
-            if (!prevData || !prevData.giderler) return;
+            if (!sabitGiderler || sabitGiderler.length === 0) return;
 
-            // Sadece sabit giderleri kopyala
-            const sabitGiderler = prevData.giderler.filter(i => i.isSabit);
-
-            if (sabitGiderler.length === 0) return;
-
-            if (confirm(`Geçen aydaki ${sabitGiderler.length} adet sabit gider bu aya kopyalanacak. Onaylıyor musunuz?`)) {
-                const newExpenses = sabitGiderler.map((item, index) => ({
-                    ...item,
-                    id: Date.now() + index // Çakışmaları engellemek için yeni ID
-                }));
-
+            if (confirm(`Geçen aydaki ${sabitGiderler.length} sabit gider kopyalanacak. Onaylıyor musunuz?`)) {
+                const newExpenses = sabitGiderler.map((item, index) => {
+                    // Tarihleri bulunduğumuz aya uyarla (Örn: Geçen ay ayın 15'i ise bu ay da 15'i olsun)
+                    let yeniTarih = state.currentMonth + '-01';
+                    if(item.tarih) {
+                        const gun = item.tarih.split('-')[2];
+                        // Eğer o ay o kadar gün yoksa (ör: şubat 30), ay sonuna sabitle
+                        const maxGun = new Date(y, m, 0).getDate();
+                        const gecerliGun = Math.min(parseInt(gun), maxGun);
+                        yeniTarih = `${state.currentMonth}-${String(gecerliGun).padStart(2, '0')}`;
+                    }
+                    return { ...item, id: Date.now() + index, tarih: yeniTarih };
+                });
                 state.data[state.currentMonth].giderler.push(...newExpenses);
-                updateUI();
-                saveData();
+                updateUI(); saveData();
             }
         }
 
-        // --- DÜZENLEME MODALI ---
         window.openEditModal = function(id) {
             const item = state.data[state.currentMonth].giderler.find(i => i.id === id);
             if (!item) return;
 
             state.editingId = id;
             const select = el('duzenleGiderKategori');
-            const otherInput = el('duzenleDigerGiderAdi');
             
-            const options = Array.from(select.options).map(o => o.value);
-            if (options.includes(item.ad)) {
-                select.value = item.ad;
-                el('duzenleDigerGiderKutusu').classList.add('hidden');
+            if (Array.from(select.options).map(o => o.value).includes(item.ad)) {
+                select.value = item.ad; el('duzenleDigerGiderKutusu').classList.add('hidden');
             } else {
-                select.value = 'Diğer';
-                el('duzenleDigerGiderKutusu').classList.remove('hidden');
-                otherInput.value = item.ad;
+                select.value = 'Diğer'; el('duzenleDigerGiderKutusu').classList.remove('hidden');
+                el('duzenleDigerGiderAdi').value = item.ad;
             }
 
             el('duzenleGiderMiktari').value = item.miktar;
+            el('duzenleGiderTarih').value = item.tarih || `${state.currentMonth}-01`;
             el('duzenleGiderSabitMi').checked = !!item.isSabit;
             el('duzenleModal').style.display = 'flex';
         }
@@ -688,92 +554,75 @@
             if (index === -1) return;
 
             let name = el('duzenleGiderKategori').value;
-            if (name === 'Diğer') {
-                name = el('duzenleDigerGiderAdi').value.trim() || 'Diğer';
-            }
+            if (name === 'Diğer') name = el('duzenleDigerGiderAdi').value.trim() || 'Diğer';
             const amount = parseFloat(el('duzenleGiderMiktari').value);
-            const isSabit = el('duzenleGiderSabitMi').checked;
+            const tarih = el('duzenleGiderTarih').value;
 
-            if (!amount || amount <= 0) {
-                showToast('Tutar geçersiz', true);
-                return;
-            }
+            if (!amount || amount <= 0 || !tarih) { showToast('Tutar ve tarih gerekli', true); return; }
 
             state.data[state.currentMonth].giderler[index] = { 
                 ...state.data[state.currentMonth].giderler[index], 
-                ad: name, 
-                miktar: amount,
-                isSabit: isSabit
+                ad: name, miktar: amount, isSabit: el('duzenleGiderSabitMi').checked, tarih: tarih
             };
 
             el('duzenleModal').style.display = 'none';
-            updateUI();
-            saveData();
+            updateUI(); saveData();
         }
 
         // --- YARDIMCILAR ---
         function initMonthSelector() {
-            const selector = el('aySecici');
-            const now = new Date();
+            const selector = el('aySecici'); const now = new Date();
             for (let i = 1; i >= -11; i--) {
                 const d = new Date(now.getFullYear(), now.getMonth() + i, 1);
                 const value = `${d.getFullYear()}-${String(d.getMonth() + 1).padStart(2, '0')}`;
-                const text = d.toLocaleDateString('tr-TR', { month: 'long', year: 'numeric' });
-                const opt = new Option(text, value);
-                if (i === 0) opt.selected = true;
-                selector.add(opt);
+                selector.add(new Option(d.toLocaleDateString('tr-TR', { month: 'long', year: 'numeric' }), value, false, i === 0));
             }
             state.currentMonth = selector.value;
         }
 
         function handleMonthChange() {
             state.currentMonth = el('aySecici').value;
+            clearFilter(); // Ay değişince filtreyi sıfırla
             updateUI();
         }
 
-        function toggleOtherInput() {
-            const show = el('giderKategoriInput').value === 'Diğer';
-            const box = el('digerGiderAdiKutusu');
-            show ? box.classList.remove('hidden') : box.classList.add('hidden');
+        function setDefaultDate() {
+            const dateInput = el('giderTarihInput');
+            const now = new Date();
+            const selectedYm = state.currentMonth;
+            const currentYm = `${now.getFullYear()}-${String(now.getMonth() + 1).padStart(2, '0')}`;
+            
+            if(selectedYm === currentYm) {
+                dateInput.value = `${currentYm}-${String(now.getDate()).padStart(2, '0')}`;
+            } else {
+                dateInput.value = `${selectedYm}-01`;
+            }
         }
 
-        function toggleEditOtherInput() {
-            const show = el('duzenleGiderKategori').value === 'Diğer';
-            const box = el('duzenleDigerGiderKutusu');
-            show ? box.classList.remove('hidden') : box.classList.add('hidden');
+        function toggleOtherInput(selId, boxId) {
+            el(boxId).classList.toggle('hidden', el(selId).value !== 'Diğer');
         }
 
-        function formatMoney(amount) {
-            return new Intl.NumberFormat('tr-TR', { minimumFractionDigits: 2, maximumFractionDigits: 2 }).format(amount) + ' ₺';
-        }
+        function formatMoney(amount) { return new Intl.NumberFormat('tr-TR', { minimumFractionDigits: 2, maximumFractionDigits: 2 }).format(amount) + ' ₺'; }
+        function formatMoneyKisa(amount) { return new Intl.NumberFormat('tr-TR', { maximumFractionDigits: 0 }).format(amount); }
 
         function showToast(msg, isError = false) {
-            const t = el('toast');
-            t.textContent = msg;
-            t.style.backgroundColor = isError ? 'var(--danger-color)' : 'rgba(0,0,0,0.85)';
-            t.classList.add('show');
-            setTimeout(() => t.classList.remove('show'), 3000);
+            const t = el('toast'); t.textContent = msg; t.style.backgroundColor = isError ? 'var(--danger-color)' : 'rgba(0,0,0,0.85)';
+            t.classList.add('show'); setTimeout(() => t.classList.remove('show'), 3000);
         }
 
         function exportCSV() {
-            const d = state.data[state.currentMonth];
-            if(!d) return;
-            
-            let csv = "Tip;Aciklama;Tutar\n";
-            csv += `Gelir;Maas;${d.maas}\n`;
-            d.giderler.forEach(i => {
-                csv += `Gider;${i.ad};-${i.miktar}\n`;
-            });
-
-            const blob = new Blob([csv], { type: 'text/csv;charset=utf-8;' });
-            const url = URL.createObjectURL(blob);
+            const d = state.data[state.currentMonth]; if(!d) return;
+            let csv = "Tip;Tarih;Aciklama;Tutar\nGelir;-;Maas;"+d.maas+"\n";
+            d.giderler.forEach(i => csv += `Gider;${i.tarih || '-'};${i.ad};-${i.miktar}\n`);
             const link = document.createElement("a");
-            link.setAttribute("href", url);
+            link.setAttribute("href", URL.createObjectURL(new Blob([csv], { type: 'text/csv;charset=utf-8;' })));
             link.setAttribute("download", `Butce_${state.currentMonth}.csv`);
-            document.body.appendChild(link);
-            link.click();
-            document.body.removeChild(link);
+            document.body.appendChild(link); link.click(); document.body.removeChild(link);
         }
     </script>
 </body>
 </html>
+
+
+```
