@@ -361,13 +361,6 @@
         "ad": "Kredi",
         "miktar": 1750,
         "isSabit": true
-      },
-      {
-        "id": 1780058512509,
-        "ad": "K.Kartı",
-        "miktar": 30000,
-        "isSabit": false,
-        "tarih": "2026-06-20"
       }
     ]
   }
