@@ -427,6 +427,13 @@
         "miktar": 1750,
         "isSabit": true,
         "tarih": "2026-07-06"
+      },
+      {
+        "id": 1781501870286,
+        "ad": "Ek hesap",
+        "miktar": 8650,
+        "isSabit": false,
+        "tarih": "2026-07-01"
       }
     ]
   }
