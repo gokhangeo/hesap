@@ -439,7 +439,7 @@
         "id": 1782250596642,
         "ad": "Kredi",
         "miktar": 7000,
-        "isSabit": false,
+        "isSabit": true,
         "tarih": "2026-07-08"
       }
     ]
