@@ -434,6 +434,13 @@
         "miktar": 8650,
         "isSabit": false,
         "tarih": "2026-07-15"
+      },
+      {
+        "id": 1782250596642,
+        "ad": "Kredi",
+        "miktar": 7000,
+        "isSabit": false,
+        "tarih": "2026-07-08"
       }
     ]
   }
