@@ -441,13 +441,6 @@
         "isSabit": false,
         "tarih": "2026-07-16",
         "not": "VAKIFBANK"
-      },
-      {
-        "id": 1782250596642,
-        "ad": "Kredi",
-        "miktar": 7000,
-        "isSabit": true,
-        "tarih": "2026-07-08"
       }
     ]
   }
