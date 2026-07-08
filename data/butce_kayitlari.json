@@ -377,7 +377,8 @@
         "ad": "Kredi",
         "miktar": 6600,
         "isSabit": true,
-        "tarih": "2026-07-27"
+        "tarih": "2026-07-27",
+        "not": "AKBANK"
       },
       {
         "id": 1781501746531,
