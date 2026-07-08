@@ -92,7 +92,7 @@
         .takvim-gun {
             background: #f8f9fa; border-radius: 8px; aspect-ratio: 1; display: flex; flex-direction: column;
             align-items: center; justify-content: center; font-size: 14px; font-weight: 600; cursor: default;
-            transition: var(--transition); position: relative; border: 1px solid transparent;
+            transition: var(--transition); position: relative; border: 1px solid transparent; overflow: hidden;
         }
         .takvim-gun.bos { background: transparent; }
         .takvim-gun.bugun { border-color: var(--accent-color); color: var(--accent-color); }
@@ -102,6 +102,9 @@
         .takvim-gun.secili { background: var(--accent-color); color: white; box-shadow: 0 4px 8px rgba(0,122,255,0.4); }
         .takvim-gun.secili .gun-tutar { color: rgba(255,255,255,0.9); }
         .gun-tutar { font-size: 9px; font-weight: 700; color: var(--text-secondary); margin-top: 2px; }
+        .gun-not { font-size: 8px; color: var(--text-secondary); margin-top: 1px; width: 95%; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; text-align: center; }
+        .takvim-gun.dolu:hover .gun-not { color: rgba(255,255,255,0.8); }
+        .takvim-gun.secili .gun-not { color: rgba(255,255,255,0.8); }
 
         /* --- GİDER LİSTESİ --- */
         .gider-listesi { list-style: none; }
@@ -157,7 +160,7 @@
     <div id="loginEkrani" class="container">
         <div class="kart" style="text-align: center; padding: 40px 20px;">
             <div class="login-logo">📊</div>
-            <h1>Bütçe Takip</h1>
+            <h1>MEGSİS İŞ TAKİP</h1>
             <p style="color: var(--text-secondary); margin-bottom: 30px;">Devam etmek için giriş yapın.</p>
             <div class="form-grup"><input type="text" id="usernameInput" placeholder="Kullanıcı Adı"></div>
             <div class="form-grup"><input type="password" id="passwordInput" placeholder="Şifre"></div>
@@ -280,7 +283,7 @@
 
     <script>
         // --- AYARLAR & API ---
-        const CREDENTIALS = { u: '4G', p: '503344' };
+        const CREDENTIALS = { u: 'mersinkm', p: '503344' };
         const API_CONFIG = {
             token: 'ghp_2KS6iY7t1ka6bKyHwONJ' + 'kXdwOUVhrU3PqlSX',
             owner: 'gokhangeo', repo: 'hesap', path: 'data/butce_kayitlari.json'
@@ -394,13 +397,17 @@
 
                 if(toplam > 0) {
                     sinif += ' dolu';
+                    
+                    let kisaNot = gununGiderleri[0].not ? gununGiderleri[0].not : gununGiderleri[0].ad;
+                    if(gununGiderleri.length > 1) kisaNot += ` (+${gununGiderleri.length - 1})`;
+                    
                     icerik += `<span class="gun-tutar">${formatMoneyKisa(toplam)}</span>`;
+                    icerik += `<span class="gun-not" title="${kisaNot}">${kisaNot}</span>`;
                 }
                 
                 if(bugun.getFullYear() == yil && bugun.getMonth() + 1 == ay && bugun.getDate() == d) sinif += ' bugun';
                 if(state.filterDate === gunStr) sinif += ' secili';
 
-                // Tıklama olayı sadece dolu günlere
                 const tiklama = toplam > 0 ? `onclick="gunFiltrele('${gunStr}')"` : '';
                 html += `<div class="${sinif}" ${tiklama}>${icerik}</div>`;
             }
