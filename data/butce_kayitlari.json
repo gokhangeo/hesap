@@ -420,7 +420,8 @@
         "ad": "Kredi",
         "miktar": 6900,
         "isSabit": true,
-        "tarih": "2026-07-11"
+        "tarih": "2026-07-11",
+        "not": "İNG"
       },
       {
         "id": 1781501746537,
