@@ -412,7 +412,8 @@
         "ad": "Kredi",
         "miktar": 3300,
         "isSabit": true,
-        "tarih": "2026-07-07"
+        "tarih": "2026-07-07",
+        "not": "ENPARA"
       },
       {
         "id": 1781501746536,
