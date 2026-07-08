@@ -86,7 +86,7 @@
         .tutar-pozitif { color: var(--success-color) !important; }
         .tutar-negatif { color: var(--danger-color) !important; }
 
-        /* --- TAKVİM (YENİ) --- */
+        /* --- TAKVİM --- */
         .takvim-grid { display: grid; grid-template-columns: repeat(7, 1fr); gap: 4px; margin-top: 10px; }
         .takvim-header { text-align: center; font-size: 11px; font-weight: 700; color: var(--text-secondary); padding-bottom: 5px; }
         .takvim-gun {
@@ -114,6 +114,7 @@
         .gider-ad { font-weight: 600; font-size: 16px; color: var(--text-primary); display: flex; align-items: center; flex-wrap: wrap; gap: 6px;}
         .sabit-rozet { font-size: 10px; background: #e5f1ff; color: var(--accent-color); padding: 2px 6px; border-radius: 8px; font-weight: 700; text-transform: uppercase; }
         .tarih-rozet { font-size: 11px; color: var(--text-secondary); display: flex; align-items: center; gap: 3px; }
+        .gider-not { font-size: 12px; color: var(--text-secondary); font-style: italic; display: flex; align-items: center; gap: 4px; }
         .gider-tutar { font-size: 15px; font-weight: 700; color: var(--danger-color); }
 
         .gider-butonlar { display: flex; gap: 8px; }
@@ -224,6 +225,9 @@
             <div class="form-grup">
                 <input type="date" id="giderTarihInput">
             </div>
+            <div class="form-grup">
+                <input type="text" id="giderNotInput" placeholder="Not (Örn: Hangi banka, vs.) - İsteğe bağlı">
+            </div>
             <div class="form-grup checkbox-container">
                 <input type="checkbox" id="giderSabitMi">
                 <label for="giderSabitMi">Bu bir sabit giderdir (Her ay tekrarlar)</label>
@@ -261,6 +265,7 @@
             <div class="form-grup hidden" id="duzenleDigerGiderKutusu"><input type="text" id="duzenleDigerGiderAdi" placeholder="Gider adı"></div>
             <div class="form-grup"><input type="number" id="duzenleGiderMiktari" placeholder="Tutar"></div>
             <div class="form-grup"><input type="date" id="duzenleGiderTarih"></div>
+            <div class="form-grup"><input type="text" id="duzenleGiderNotInput" placeholder="Not (İsteğe bağlı)"></div>
             <div class="form-grup checkbox-container">
                 <input type="checkbox" id="duzenleGiderSabitMi"><label for="duzenleGiderSabitMi">Sabit gider</label>
             </div>
@@ -437,12 +442,14 @@
             items.slice().reverse().forEach(item => {
                 const isSabit = item.isSabit ? '<span class="sabit-rozet">📌 Sabit</span>' : '';
                 const tarihGosterim = item.tarih ? `<div class="tarih-rozet">📅 ${item.tarih.split('-').reverse().join('.')}</div>` : '';
+                const notGosterim = item.not ? `<div class="gider-not">📝 ${item.not}</div>` : '';
                 
                 list.innerHTML += `
                     <li class="gider-item">
                         <div class="gider-bilgi">
                             <span class="gider-ad">${item.ad} ${isSabit}</span>
                             ${tarihGosterim}
+                            ${notGosterim}
                             <span class="gider-tutar">${formatMoney(item.miktar)}</span>
                         </div>
                         <div class="gider-butonlar">
@@ -469,6 +476,7 @@
             
             const amount = parseFloat(el('giderMiktariInput').value);
             const tarih = el('giderTarihInput').value;
+            const not = el('giderNotInput').value.trim();
 
             if (!amount || amount <= 0 || !tarih) {
                 showToast('Lütfen tutar ve tarih girin!', true); return;
@@ -476,10 +484,11 @@
 
             state.data[state.currentMonth].giderler.push({ 
                 id: Date.now(), ad: name, miktar: amount, 
-                isSabit: el('giderSabitMi').checked, tarih: tarih 
+                isSabit: el('giderSabitMi').checked, tarih: tarih, not: not
             });
 
             el('giderMiktariInput').value = ''; el('digerGiderAdiInput').value = '';
+            el('giderNotInput').value = '';
             el('giderKategoriInput').value = 'Kira'; el('giderSabitMi').checked = false;
             el('digerGiderAdiKutusu').classList.add('hidden');
 
@@ -512,11 +521,9 @@
 
             if (confirm(`Geçen aydaki ${sabitGiderler.length} sabit gider kopyalanacak. Onaylıyor musunuz?`)) {
                 const newExpenses = sabitGiderler.map((item, index) => {
-                    // Tarihleri bulunduğumuz aya uyarla (Örn: Geçen ay ayın 15'i ise bu ay da 15'i olsun)
                     let yeniTarih = state.currentMonth + '-01';
                     if(item.tarih) {
                         const gun = item.tarih.split('-')[2];
-                        // Eğer o ay o kadar gün yoksa (ör: şubat 30), ay sonuna sabitle
                         const maxGun = new Date(y, m, 0).getDate();
                         const gecerliGun = Math.min(parseInt(gun), maxGun);
                         yeniTarih = `${state.currentMonth}-${String(gecerliGun).padStart(2, '0')}`;
@@ -544,6 +551,7 @@
 
             el('duzenleGiderMiktari').value = item.miktar;
             el('duzenleGiderTarih').value = item.tarih || `${state.currentMonth}-01`;
+            el('duzenleGiderNotInput').value = item.not || '';
             el('duzenleGiderSabitMi').checked = !!item.isSabit;
             el('duzenleModal').style.display = 'flex';
         }
@@ -556,12 +564,13 @@
             if (name === 'Diğer') name = el('duzenleDigerGiderAdi').value.trim() || 'Diğer';
             const amount = parseFloat(el('duzenleGiderMiktari').value);
             const tarih = el('duzenleGiderTarih').value;
+            const not = el('duzenleGiderNotInput').value.trim();
 
             if (!amount || amount <= 0 || !tarih) { showToast('Tutar ve tarih gerekli', true); return; }
 
             state.data[state.currentMonth].giderler[index] = { 
                 ...state.data[state.currentMonth].giderler[index], 
-                ad: name, miktar: amount, isSabit: el('duzenleGiderSabitMi').checked, tarih: tarih
+                ad: name, miktar: amount, isSabit: el('duzenleGiderSabitMi').checked, tarih: tarih, not: not
             };
 
             el('duzenleModal').style.display = 'none';
@@ -612,8 +621,8 @@
 
         function exportCSV() {
             const d = state.data[state.currentMonth]; if(!d) return;
-            let csv = "Tip;Tarih;Aciklama;Tutar\nGelir;-;Maas;"+d.maas+"\n";
-            d.giderler.forEach(i => csv += `Gider;${i.tarih || '-'};${i.ad};-${i.miktar}\n`);
+            let csv = "Tip;Tarih;Aciklama;Not;Tutar\nGelir;-;Maas;-;"+d.maas+"\n";
+            d.giderler.forEach(i => csv += `Gider;${i.tarih || '-'};${i.ad};${i.not || '-'};-${i.miktar}\n`);
             const link = document.createElement("a");
             link.setAttribute("href", URL.createObjectURL(new Blob([csv], { type: 'text/csv;charset=utf-8;' })));
             link.setAttribute("download", `Butce_${state.currentMonth}.csv`);
