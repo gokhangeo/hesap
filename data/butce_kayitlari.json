@@ -384,7 +384,8 @@
         "ad": "Kredi",
         "miktar": 1200,
         "isSabit": true,
-        "tarih": "2026-07-16"
+        "tarih": "2026-07-16",
+        "not": "QNB"
       },
       {
         "id": 1781501746532,
