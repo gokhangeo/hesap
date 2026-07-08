@@ -392,7 +392,8 @@
         "ad": "Kredi",
         "miktar": 6500,
         "isSabit": true,
-        "tarih": "2026-07-18"
+        "tarih": "2026-07-18",
+        "not": "GARANTİ"
       },
       {
         "id": 1781501746533,
