@@ -438,7 +438,7 @@
         "id": 1781501870286,
         "ad": "Ek hesap",
         "miktar": 8650,
-        "isSabit": false,
+        "isSabit": true,
         "tarih": "2026-07-16",
         "not": "VAKIFBANK"
       }
