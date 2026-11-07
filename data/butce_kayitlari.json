@@ -670,6 +670,14 @@
         "isSabit": true,
         "tarih": "2026-11-16",
         "not": "VAKIFBANK"
+      },
+      {
+        "id": 1794078784768,
+        "ad": "Kredi",
+        "miktar": 3000,
+        "isSabit": true,
+        "tarih": "2026-11-16",
+        "not": "Vakıfbank"
       }
     ]
   },
