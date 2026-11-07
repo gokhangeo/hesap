@@ -598,7 +598,79 @@
   },
   "2026-11": {
     "maas": 0,
-    "giderler": []
+    "giderler": [
+      {
+        "id": 1794078715765,
+        "ad": "Kredi",
+        "miktar": 6600,
+        "isSabit": true,
+        "tarih": "2026-11-27",
+        "not": "AKBANK"
+      },
+      {
+        "id": 1794078715766,
+        "ad": "Kredi",
+        "miktar": 1200,
+        "isSabit": true,
+        "tarih": "2026-11-16",
+        "not": "QNB"
+      },
+      {
+        "id": 1794078715767,
+        "ad": "Kredi",
+        "miktar": 6500,
+        "isSabit": true,
+        "tarih": "2026-11-18",
+        "not": "GARANTİ"
+      },
+      {
+        "id": 1794078715768,
+        "ad": "Aidat",
+        "miktar": 3750,
+        "isSabit": true,
+        "tarih": "2026-11-15"
+      },
+      {
+        "id": 1794078715769,
+        "ad": "Kira",
+        "miktar": 40000,
+        "isSabit": true,
+        "tarih": "2026-11-15",
+        "not": ""
+      },
+      {
+        "id": 1794078715770,
+        "ad": "Kredi",
+        "miktar": 3300,
+        "isSabit": true,
+        "tarih": "2026-11-07",
+        "not": "ENPARA"
+      },
+      {
+        "id": 1794078715771,
+        "ad": "Kredi",
+        "miktar": 6900,
+        "isSabit": true,
+        "tarih": "2026-11-11",
+        "not": "İNG"
+      },
+      {
+        "id": 1794078715772,
+        "ad": "Kredi",
+        "miktar": 1750,
+        "isSabit": true,
+        "tarih": "2026-11-06",
+        "not": "QNB"
+      },
+      {
+        "id": 1794078715773,
+        "ad": "Ek hesap",
+        "miktar": 7000,
+        "isSabit": true,
+        "tarih": "2026-11-16",
+        "not": "VAKIFBANK"
+      }
+    ]
   },
   "2026-12": {
     "maas": 0,
