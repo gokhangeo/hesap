@@ -678,6 +678,14 @@
         "isSabit": true,
         "tarih": "2026-11-16",
         "not": "Vakıfbank"
+      },
+      {
+        "id": 1794078887997,
+        "ad": "Göktan okul",
+        "miktar": 13000,
+        "isSabit": true,
+        "tarih": "2026-11-16",
+        "not": ""
       }
     ]
   },
